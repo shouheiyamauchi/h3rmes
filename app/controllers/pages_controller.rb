@@ -3,6 +3,7 @@ class PagesController < ApplicationController
   end
 
   def json
+    @variable = "hello there"
   respond_to do |format|
     msg = {
     "messages": [
@@ -11,7 +12,7 @@ class PagesController < ApplicationController
             "type": "template",
             "payload": {
               "template_type": "button",
-              "text": "Total Price: <Insert Total>
+              "text": "Total Price: #{msg}<Insert Total>
 
               < Display total items >
               Would you like to pay now?",
