@@ -254,12 +254,14 @@
                         <li>
                             <a href="#"><i class="fa fa-bars fa-fw"></i> Menu<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
+                              <li>
+                                  <a href="/menu_groups">View All</a>
+                              </li>
+                                <% @menu_nav.each do |nav| %>
                                 <li>
-                                    <a href="/menu_groups">View</a>
+                                  <a href="/menu_groups?menu_groups=<%= nav.id %>#<%= nav.id %>"><%= nav.name %></a>
                                 </li>
-                                <li>
-                                    <a href="/menu_groups">Edit</a>
-                                </li>
+                                <% end %>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -267,10 +269,10 @@
                             <a href="#"><i class="fa fa-wrench fa-fw"></i> Orders<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="panels-wells.html">Active</a>
+                                    <a href="/orders">Active</a>
                                 </li>
                                 <li>
-                                    <a href="buttons.html">Paid</a>
+                                    <a href="/orders">Paid</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

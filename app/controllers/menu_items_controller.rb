@@ -10,6 +10,7 @@ class MenuItemsController < ApplicationController
   # GET /menu_items/1
   # GET /menu_items/1.json
   def show
+    @menu_group = MenuGroup.find(@menu_item.menu_group_id)
   end
 
   # GET /menu_items/new

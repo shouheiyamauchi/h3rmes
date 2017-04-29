@@ -459,6 +459,26 @@
     // /* background-color: #eeeeee; */
 }
 
-.navbar-brand {
-    padding-right: -15px !important;
+// Stylings for menu items
+
+.menu-item {
+  width:100px;
+  height:100px;
+  background-size: cover;
+  border: 0px solid black;
+  border-radius: 5px;
+}
+
+.menu-item-td {
+  border: 1px solid #337AB7;
+}
+
+.menu-description {
+  width: 100%;
+}
+
+.panel-heading {
+  a {
+    color: #EBEBEB;
+  }
 }
