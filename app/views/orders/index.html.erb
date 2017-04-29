@@ -1,29 +1,41 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Orders</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Order list</th>
-      <th>User</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @orders.each do |order| %>
-      <tr>
-        <td><%= order.order_list %></td>
-        <td><%= order.user %></td>
-        <td><%= link_to 'Show', order %></td>
-        <td><%= link_to 'Edit', edit_order_path(order) %></td>
-        <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
 
 <%= link_to 'New Order', new_order_path %>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Active</a></li>
+  <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Paid</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="home">
+    <% @unpaid_order.each do |order| %>
+      <%= order.id %>
+      <% order.order_list.each do |item| %>
+        name <%= item["name"] %> <br>
+        description <%= item["description"] %> <br>
+        price  <%= item["price"] %> <br>
+      <% end %>
+      total <%= order.find_total %> <br>
+      <br>
+    <% end %>
+  </div>
+  <div role="tabpanel" class="tab-pane" id="profile">
+    <% @paid_order.each do |order| %>
+      <%= order.id %>
+      <% order.order_list.each do |item| %>
+        <%= item["name"] %>
+        <%= item["description"] %>
+        <%= item["price"] %>
+      <% end %>
+      <br>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  $('nav-tabs a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+  })
+</script>
