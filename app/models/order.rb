@@ -1,6 +1,6 @@
 class Order < ApplicationRecord
   belongs_to :user
-  skip_before_action :verify_authenticity_token, if: :json_request?
+  skip_before_action :verify_authenticity_token
 
   def append_item(result)
     if result == nil
@@ -18,10 +18,5 @@ class Order < ApplicationRecord
       sum +=  item["price"]
     end
     return sum
-  end
-
-  protected
-
-  def json_request? request.format.json?
   end
 end
