@@ -32,7 +32,7 @@ class MenuGroupsController < ApplicationController
 
     respond_to do |format|
       if @menu_group.save
-        format.html { redirect_to :back, notice: 'Menu group was successfully created.' }
+        format.html { redirect_to @menu_group, notice: 'Menu group was successfully created.' }
         format.json { render :show, status: :created, location: @menu_group }
       else
         format.html { render :new }
