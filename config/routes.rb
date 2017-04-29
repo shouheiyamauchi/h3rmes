@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root 'pages#home'
 
+  get 'pages/json'
   resources :orders
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
