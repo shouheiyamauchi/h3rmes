@@ -1,19 +1,7 @@
-<%= form_for(order) do |f| %>
-  <% if order.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h2>
-
-      <ul>
-      <% order.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+<%= form_for (order) do |f|%>
   <div class="field">
-    <%= f.label :order_list %>
-    <%= f.text_field :order_list %>
+    <%= f.label :table_number %>
+    <%= f.text_field :table_number %>
   </div>
 
   <div class="field">
