@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
   belongs_to :user
+  skip_before_action :verify_authenticity_token, if: :json_request?
 
   def append_item(result)
     if result == nil
