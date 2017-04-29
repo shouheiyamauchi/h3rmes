@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  skip_before_action :verify_authenticity_token
+  # skip_before_action :verify_authenticity_token
 
   # GET /orders
   # GET /orders.json
@@ -39,6 +39,7 @@ class OrdersController < ApplicationController
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
       else
+        byebug
         format.html { render :new }
         format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
       end
