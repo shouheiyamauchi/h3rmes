@@ -1,6 +1,5 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  skip_before_action :verify_authenticity_token
 
   # GET /orders
   # GET /orders.json
@@ -79,10 +78,5 @@ class OrdersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
       params.require(:order).permit(:order_list, :user_id, :table_number, :paid)
-    end
-
-    protected
-
-    def json_request? request.format.json?
     end
 end
