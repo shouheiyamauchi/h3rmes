@@ -12,7 +12,7 @@ class PagesController < ApplicationController
             "type": "template",
             "payload": {
               "template_type": "button",
-              "text": "Total Price: #{msg}<Insert Total>
+              "text": "Total Price: #{@variable}<Insert Total>
 
               < Display total items >
               Would you like to pay now?",
