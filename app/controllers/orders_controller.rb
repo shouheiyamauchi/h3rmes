@@ -5,11 +5,15 @@ class OrdersController < ApplicationController
   # GET /orders.json
   def index
     @orders = Order.all
+    @unpaid_order = Order.where(paid: false)
+    @paid_order = Order.where(paid: true)
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
+    @results = MenuItem.search(params[:search])
+    @order.append_item(@results)
   end
 
   # GET /orders/new
@@ -69,6 +73,6 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:order_list, :user_id)
+      params.require(:order).permit(:order_list, :user_id, :table_number, :paid)
     end
 end
