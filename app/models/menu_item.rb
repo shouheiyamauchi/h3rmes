@@ -3,9 +3,10 @@ class MenuItem < ApplicationRecord
   mount_uploader :image, ImageUploader
 
   def self.search(search)
-    if search == nil
+    item = MenuItem.where(:name=>search)
+    if item[0] == nil
     else
-    where("name LIKE ?", "%#{search}%")
+      item.first
     end
   end
 end

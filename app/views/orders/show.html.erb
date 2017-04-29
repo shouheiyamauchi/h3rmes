@@ -9,9 +9,9 @@ user id <%= @order.user_id %> <br>
 table number<%= @order.table_number %> <br> <br>
 
 order <% @order.order_list.each do |item| %>
-  name <%= item["name"] %> <br>
-  description <%= item["description"] %> <br>
-  price <%= item["price"] %> <br>
+    name <%= item["name"] %> <br>
+    description <%= item["description"] %> <br>
+    price <%= item["price"] %> <br>
 <% end %>
 
 <%= @order.find_total %>
