@@ -53,7 +53,7 @@ class OrdersController < ApplicationController
         format.json { render :show, status: :ok, location: @order }
       else
         format.html { render :edit }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
+        format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
       end
     end
   end
