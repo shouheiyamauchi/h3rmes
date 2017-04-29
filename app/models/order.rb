@@ -5,7 +5,7 @@ class Order < ApplicationRecord
     if result == nil
     else
       array = self.order_list
-      array << result[0]
+      array << result
       self.update(order_list: array)
       self.save
     end
