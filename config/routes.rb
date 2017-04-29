@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root 'pages#home'
 
+  get 'pages/stats'
+
   resources :orders
 
   devise_for :users, controllers: { registrations: 'users/registrations' }

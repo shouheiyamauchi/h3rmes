@@ -278,16 +278,11 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-wrench fa-fw"></i> Stats<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="panels-wells.html">Active</a>
-                                </li>
-                                <li>
-                                    <a href="buttons.html">Paid</a>
-                                </li>
-                            </ul>
                             <!-- /.nav-second-level -->
+                            <%= link_to pages_stats_path do %>
+                            <i class="fa fa-wrench fa-fw"></i>
+                            Stats
+                            <% end %>
                         </li>
                     </ul>
                 </div>

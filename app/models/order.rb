@@ -20,3 +20,10 @@ class Order < ApplicationRecord
   end
 
 end
+
+def total
+  sum = 0
+  Order.all.each do |order|
+    sum += order.order_list.count
+  end
+end
