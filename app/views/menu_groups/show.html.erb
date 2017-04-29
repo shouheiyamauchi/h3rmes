@@ -2,6 +2,7 @@
   <%= item.name%>
   <%= item.description %>
   <%= item.price %>
+  <img src="<%= item.image %>" alt="">
 <% end %>
 
 <%= render 'menu_items/form', menu_item: @menu_item%>
