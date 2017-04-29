@@ -15,6 +15,7 @@ class MenuItemsController < ApplicationController
   # GET /menu_items/new
   def new
     @menu_item = MenuItem.new
+
   end
 
   # GET /menu_items/1/edit
@@ -25,6 +26,8 @@ class MenuItemsController < ApplicationController
   # POST /menu_items.json
   def create
     @menu_item = MenuItem.new(menu_item_params)
+    @menu_group = MenuGroup.find(params[:id])
+    @menu_item.menu_group_id = params[:id]
 
     respond_to do |format|
       if @menu_item.save

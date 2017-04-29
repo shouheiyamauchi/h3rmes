@@ -1,4 +1,4 @@
-<%= form_for(menu_item) do |f| %>
+<%= form_for (menu_item) do |f| %>
   <% if menu_item.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(menu_item.errors.count, "error") %> prohibited this menu_item from being saved:</h2>
@@ -12,18 +12,13 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :menu_group_id %>
-    <%= f.text_field :menu_group_id %>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
   </div>
 
   <div class="field">
     <%= f.label :price %>
     <%= f.text_field :price %>
-  </div>
-
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
   </div>
 
   <div class="field">

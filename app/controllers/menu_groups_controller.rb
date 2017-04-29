@@ -10,6 +10,9 @@ class MenuGroupsController < ApplicationController
   # GET /menu_groups/1
   # GET /menu_groups/1.json
   def show
+    @menu_item = MenuItem.new
+    @menu_group = MenuGroup.find(params[:id])
+    @menu_items = MenuItem.where(menu_group_id: @menu_group.id)
   end
 
   # GET /menu_groups/new
@@ -25,10 +28,11 @@ class MenuGroupsController < ApplicationController
   # POST /menu_groups.json
   def create
     @menu_group = MenuGroup.new(menu_group_params)
+    @menu_group.user_id = current_user.id
 
     respond_to do |format|
       if @menu_group.save
-        format.html { redirect_to @menu_group, notice: 'Menu group was successfully created.' }
+        format.html { redirect_to :back, notice: 'Menu group was successfully created.' }
         format.json { render :show, status: :created, location: @menu_group }
       else
         format.html { render :new }
