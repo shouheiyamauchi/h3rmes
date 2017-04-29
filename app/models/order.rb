@@ -20,4 +20,8 @@ class Order < ApplicationRecord
     return sum
   end
 
+  protected
+
+  def json_request? request.format.json?
+  end
 end
