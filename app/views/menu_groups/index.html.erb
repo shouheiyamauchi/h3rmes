@@ -1,22 +1,49 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Menu Groups</h1>
+<h1>Menu</h1>
+
+<%= link_to 'Add a new category', new_menu_group_path %><br><br>
+
     <% @menu_groups.each do |menu_group| %>
 
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <%= menu_group.name %>
+          <span style="font-size:25px"><a name="<%= menu_group.id %>"></a><%= menu_group.name %></span><span style="float:right;padding-top:8px;"><%= link_to 'Show', menu_group %> | <%= link_to 'Edit', edit_menu_group_path(menu_group) %> | <%= link_to 'Destroy', menu_group, method: :delete, data: { confirm: 'Are you sure?' } %></span>
         </div>
         <div class="panel-body">
-          <p><%= menu_group.description %> <%= link_to 'Show', menu_group %> | <%= link_to 'Edit', edit_menu_group_path(menu_group) %> | <%= link_to 'Destroy', menu_group, method: :delete, data: { confirm: 'Are you sure?' } %></p>
+          <p><em><%= menu_group.description %></em></p>
           <hr>
+          <% menu_group.menu_items.each do |menu_item| %>
+            <div class="media">
+              <div class="media-left">
+                <table class="menu-item">
+                  <tr>
+                    <td class="menu-item-td" style="background-image: url('<%= menu_item.image.url %>'); background-size: cover;"></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="media-body">
+                <table class="menu-description">
+                  <tr>
+                    <td><h4 class="media-heading"><%= menu_item.name %></h4></td>
+                    <td rowspan="2" class="text-right"><h2>$<%= '%.2f' % menu_item.price %></h2>
+                      <%= link_to 'Show', menu_item %> |
+                      <%= link_to 'Edit', edit_menu_item_path(menu_item) %> |
+                      <%= link_to 'Destroy', menu_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  </tr>
+                  <tr>
+                    <td><%= menu_item.description %></td>
+                    <td></td>
+                  </tr>
+                </table>
+                <hr>
+
+              </div>
+            </div>
+          <% end %>
         </div>
         <!-- <div class="panel-footer">
           Panel Footer
         </div> -->
       </div>
     <% end %>
-
-<br>
-
-<%= link_to 'New Menu Group', new_menu_group_path %>

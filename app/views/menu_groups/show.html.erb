@@ -1,8 +1,11 @@
-<% @menu_items.each do |item| %>
-  <%= item.name%>
-  <%= item.description %>
-  <%= item.price %>
-  <img src="<%= item.image %>" alt="">
+<% @menu_items.each do |menu_item| %>
+  <%= menu_item.name%>
+  <%= menu_item.description %>
+  <%= menu_item.price %>
+  <img src="<%= menu_item.image %>" alt="">
+  <%= link_to 'Show', menu_item %> |
+  <%= link_to 'Edit', edit_menu_item_path(menu_item) %> |
+  <%= link_to 'Destroy', menu_item, method: :delete, data: { confirm: 'Are you sure?' } %><br><br>
 <% end %>
 
 <%= render 'menu_items/form', menu_item: @menu_item%>
