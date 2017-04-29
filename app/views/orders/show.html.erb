@@ -1,14 +1,19 @@
-<p id="notice"><%= notice %></p>
+<%= form_tag order_path(@order), :method => 'get' do %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil%>
+  </p>
+<% end %>
 
-<p>
-  <strong>Order list:</strong>
-  <%= @order.order_list %>
-</p>
+user id <%= @order.user_id %> <br>
+table number<%= @order.table_number %> <br> <br>
 
-<p>
-  <strong>User:</strong>
-  <%= @order.user %>
-</p>
+order <% @order.order_list.each do |item| %>
+  name <%= item["name"] %> <br>
+  description <%= item["description"] %> <br>
+  price <%= item["price"] %> <br>
+<% end %>
 
-<%= link_to 'Edit', edit_order_path(@order) %> |
-<%= link_to 'Back', orders_path %>
+<%= @order.find_total %>
+
+<%= params[:search] %>
