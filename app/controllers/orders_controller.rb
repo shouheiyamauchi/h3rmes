@@ -13,7 +13,10 @@ class OrdersController < ApplicationController
   # GET /orders/1.json
   def show
     @results = MenuItem.search(params[:search])
-    @order.append_item(@results)
+    if @results == nil
+    else
+      @order.append_item(@results)
+    end
   end
 
   # GET /orders/new
