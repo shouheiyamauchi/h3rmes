@@ -92,7 +92,7 @@ class PagesController < ApplicationController
                 "elements":[
                   {
                     "title":"Classic White T-Shirt",
-                    "image_url":"http://petersapparel.parseapp.com/img/item100-thumb.png",
+                    "image_url":"https://h3rmes.s3.amazonaws.com/uploads/menu_item/image/2/4.jpg",
                     "subtitle":"Soft white cotton t-shirt is back in style",
                     "buttons":[
                       {
@@ -109,7 +109,7 @@ class PagesController < ApplicationController
                   },
                   {
                     "title":"Classic Grey T-Shirt",
-                    "image_url":"http://petersapparel.parseapp.com/img/item101-thumb.png",
+                    "image_url":"https://h3rmes.s3.amazonaws.com/uploads/menu_item/image/4/5.jpg",
                     "subtitle":"Soft gray cotton t-shirt is back in style",
                     "buttons":[
                       {
