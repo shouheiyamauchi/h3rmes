@@ -31,14 +31,20 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new :user_id => params[:user_id]
+    @order = Order.new :user_id => params[:user_id], :order_list => params[:order_list], :table_number => params[:table_number], :paid => params[:paid]
+
+    success_msg = {
+    "messages": [
+      {"text": "Your order was created."},
+      {"text": "Thank you."}
+      ]
+    }
 
     respond_to do |format|
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
-        format.json { render :show, status: :created, location: @order }
+        format.json { render :json => success_msg }
       else
-        byebug
         format.html { render :new }
         format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
       end

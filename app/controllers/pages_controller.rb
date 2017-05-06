@@ -38,11 +38,11 @@ class PagesController < ApplicationController
   end
 
   def test
-    @variable = "hello there"
+    @user_id = params[:user_id]
     respond_to do |format|
       msg = {
       "messages": [
-        {"text": "Welcome to our store!"},
+        {"text": "Welcome to our store! User: #{@user_id}"},
         {"text": "How can I help you?"}
         ]
       }
