@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'pages/json'
   get 'pages/test'
   get 'pages/choose_business'
+  get 'pages/list_foods'
   resources :orders
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
