@@ -50,4 +50,33 @@ class PagesController < ApplicationController
       format.json  { render :json => msg } # don't do msg.to_json
     end
   end
+
+  def choose_business
+    @business = params[:business]
+    @table_no = params[:table_no]
+    respond_to do |format|
+      msg = {
+      "messages": [
+        {"text": "Welcome to our #{@business}! You're at table no: #{@table_no}"},
+        {
+          "attachment": {
+            "payload":{
+              "template_type": "button",
+              "text": "test JSON with postback",
+              "buttons": [
+                {
+                  "url": "https://pacific-wave-33803.herokuapp.com/pages/test.json?fb_id={{messenger user id}}",
+                  "type":"json_plugin_url",
+                  "title":"go"
+                }
+              ]
+            },
+            "type": "template"
+          }
+        }
+        ]
+      }
+      format.json  { render :json => msg } # don't do msg.to_json
+    end
+  end
 end
