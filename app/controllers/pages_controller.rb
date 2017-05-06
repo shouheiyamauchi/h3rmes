@@ -39,10 +39,11 @@ class PagesController < ApplicationController
 
   def test
     @user_id = params[:user_id]
+    @fb_id = params[:fb_id]
     respond_to do |format|
       msg = {
       "messages": [
-        {"text": "Welcome to our store! User: #{@user_id}"},
+        {"text": "Welcome to our store! User: #{@user_id}, FB ID: #{@fb_id}"},
         {"text": "How can I help you?"}
         ]
       }
