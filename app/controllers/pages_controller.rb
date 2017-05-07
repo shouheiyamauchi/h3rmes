@@ -131,23 +131,23 @@ class PagesController < ApplicationController
         ]
       }
 
-      # msg[:messages][0][:attachment][:elements] << {
-      #   "title":"Classic White T-Shirt",
-      #   "image_url":"https://h3rmes.s3.amazonaws.com/uploads/menu_item/image/2/4.jpg",
-      #   "subtitle":"Soft white cotton t-shirt is back in style",
-      #   "buttons":[
-      #     {
-      #       "type":"web_url",
-      #       "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
-      #       "title":"View Item"
-      #     },
-      #     {
-      #       "type":"web_url",
-      #       "url":"https://petersapparel.parseapp.com/buy_item?item_id=100",
-      #       "title":"Buy Item"
-      #     }
-      #   ]
-      # }
+      msg[:messages][0][:attachment][:payload][:elements] << {
+        "title":"Classic White T-Shirt",
+        "image_url":"https://h3rmes.s3.amazonaws.com/uploads/menu_item/image/2/4.jpg",
+        "subtitle":"Soft white cotton t-shirt is back in style",
+        "buttons":[
+          {
+            "type":"web_url",
+            "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
+            "title":"View Item"
+          },
+          {
+            "type":"web_url",
+            "url":"https://petersapparel.parseapp.com/buy_item?item_id=100",
+            "title":"Buy Item"
+          }
+        ]
+      }
 
       format.json  { render :json => msg } # don't do msg.to_json
     end
