@@ -115,7 +115,11 @@ class PagesController < ApplicationController
               "payload": {
                 "template_type": "button",
                 "text": "Please choose your menu:",
-                "buttons": []
+                "buttons": [{
+                        "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
+                        "type":"json_plugin_url",
+                        "title":"Go Back"
+                      }]
               }
             }
           }
@@ -166,7 +170,7 @@ class PagesController < ApplicationController
             {
               "type":"json_plugin_url",
               "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
-              "title":"Go Back to Categories"
+              "title":"Go Back"
             }
           ]
         }
