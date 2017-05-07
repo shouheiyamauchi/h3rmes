@@ -89,14 +89,8 @@ class PagesController < ApplicationController
               "type": "template",
               "payload": {
                 "template_type": "button",
-                "text": "Hello!",
-                "buttons": [
-                  {
-                    "type": "web_url",
-                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=100",
-                    "title": "Buy Item"
-                  }
-                ]
+                "text": "Please choose your menu:",
+                "buttons": []
               }
             }
           }
@@ -105,7 +99,7 @@ class PagesController < ApplicationController
 
       MenuGroup.all.each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "/pages/list_foods.json?category_id=#{category.id}",
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
@@ -139,14 +133,14 @@ class PagesController < ApplicationController
           "subtitle":"#{item.description}",
           "buttons":[
             {
-              "type":"web_url",
-              "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
-              "title":"View Item"
+              "type":"json_plugin_url",
+              "url":"https://pacific-wave-33803.herokuapp.com/pages/add_item.json?item=#{item.name}",
+              "title":"Order Item"
             },
             {
-              "type":"web_url",
-              "url":"https://petersapparel.parseapp.com/buy_item?item_id=100",
-              "title":"Buy Item"
+              "type":"json_plugin_url",
+              "url":"https://pacific-wave-33803.herokuapp.com/pages/list_foods.json",
+              "title":"Go Back to Categories"
             }
           ]
         }
@@ -156,24 +150,24 @@ class PagesController < ApplicationController
     end
   end
 
-  def create_order
-    @order = Order.new :table_number => params[:table_number], :fb_id => params[:fb_id], :business_name => params[:business_name]
-    msg = {
-    "messages": [
-      {"text": "Your order was created."},
-      {"text": "Thank you."}
-      ]
-    }
-    respond_to do |format|
-      if @order.save
-        format.html { redirect_to @order, notice: 'Order was successfully created.' }
-        format.json { render :json => success_msg }
-      else
-        format.html { render :new }
-        format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
-      end
-    end
-  end
+  # def create_order
+  #   @order = Order.new :table_number => params[:table_number], :fb_id => params[:fb_id], :business_name => params[:business_name]
+  #   msg = {
+  #   "messages": [
+  #     {"text": "Your order was created."},
+  #     {"text": "Thank you."}
+  #     ]
+  #   }
+  #   respond_to do |format|
+  #     if @order.save
+  #       format.html { redirect_to @order, notice: 'Order was successfully created.' }
+  #       format.json { render :json => success_msg }
+  #     else
+  #       format.html { render :new }
+  #       format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
+  #     end
+  #   end
+  # end
 
   def add_item
     @item = params[:item]
@@ -188,8 +182,8 @@ class PagesController < ApplicationController
     respond_to do |format|
       msg = {
       "messages": [
-        {"text": "You order id is #{@order.id}"},
-        {"text": "Your current orde includers: #{@order.order_list}"}
+        {"text": "You have ordered: #{@item}"},
+        {"text": "Your current order includes: #{@order.order_list}"}
         ]
       }
 
