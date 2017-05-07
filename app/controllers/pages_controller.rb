@@ -235,4 +235,22 @@ class PagesController < ApplicationController
       end
     end
   end
+
+  def add_item
+    @item = "curry"
+    @fb_user = params[:fb_user]
+    @order = Order.where(:fb_user=>@fb_user).first
+
+    respond_to do |format|
+      msg = {
+      "messages": [
+        {"text": @order.id},
+        {"text": "Thank you."}
+        ]
+      }
+
+      format.json { render :json => msg }
+    end
+
+  end
 end

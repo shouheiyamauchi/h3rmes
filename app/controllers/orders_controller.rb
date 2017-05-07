@@ -31,7 +31,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new :user_id => params[:user_id], :order_list => params[:order_list], :table_number => params[:table_number], :paid => params[:paid], :fb_id => params[:fb], :business_name => params[:business_name]
+    @order = Order.new :user_id => params[:user_id], :order_list => params[:order_list], :table_number => params[:table_number], :paid => params[:paid], :fb_user => params[:fb_user], :business_name => params[:business_name]
 
     success_msg = {
     "messages": [
