@@ -145,18 +145,7 @@ class PagesController < ApplicationController
               "type":"template",
               "payload":{
                 "template_type":"generic",
-                "elements":[{
-                  "title":"#{Category.find(@category_id).name}",
-                  "image_url":"",
-                  "subtitle":"#{Category.find(@category_id).description}",
-                  "buttons":[
-                    {
-                      "type":"json_plugin_url",
-                      "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
-                      "title":"Go Back to Categories"
-                    }
-                  ]
-                }]
+                "elements":[]
               }
             }
           }
@@ -173,6 +162,11 @@ class PagesController < ApplicationController
               "type":"json_plugin_url",
               "url":"https://pacific-wave-33803.herokuapp.com/pages/add_item.json?item=#{item.name}&fb_user=#{@fb_user}",
               "title":"Order Item"
+            },
+            {
+              "type":"json_plugin_url",
+              "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
+              "title":"Go Back to Categories"
             }
           ]
         }
