@@ -225,8 +225,14 @@ class PagesController < ApplicationController
       {"text": "Thank you."}
       ]
     }
-    if @order.save
-      format.json  { render :json => msg } # don't do msg.to_json
+    respond_to do |format|
+      if @order.save
+        format.html { redirect_to @order, notice: 'Order was successfully created.' }
+        format.json { render :json => success_msg }
+      else
+        format.html { render :new }
+        format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
+      end
     end
   end
 end
