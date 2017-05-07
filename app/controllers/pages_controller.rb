@@ -117,33 +117,13 @@ class PagesController < ApplicationController
   end
 
   def main_menu
-    @fb_user = params[:fb_user]
     respond_to do |format|
       msg = {
-        "messages": [
-          {
-            "attachment": {
-              "payload":{
-                "template_type": "button",
-                "text": "Please choose from the following options:",
-                "buttons": [
-                  {
-                    "url": "https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
-                    "type":"json_plugin_url",
-                    "title":"Order"
-                  },
-                  {
-                    "url": "https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}",
-                    "type":"json_plugin_url",
-                    "title":"Checkout"
-                  }
-                ]
-              },
-              "type": "template"
-            }
-          }
-        ]
-      }
+         "messages": [
+           {"text": "Welcome to our store!"},
+           {"text": "How can I help you?"}
+         ]
+        }
       format.json  { render :json => msg } # don't do msg.to_json
     end
   end
