@@ -260,7 +260,7 @@ class PagesController < ApplicationController
 
   def find_total
     @fb_user = params[:fb_user]
-    @order = Order.where(:fb_user=>@fb_user, :paid=>@false).first
+    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
     @sum = 0
     @order_list = @order.order_list
 
