@@ -81,7 +81,71 @@ class PagesController < ApplicationController
     end
   end
 
+  def create_order
+    @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => params[:business_name]
+    @fb_user = params[:fb_user]
+    msg = {
+      "messages": [
+        {
+          "attachment": {
+            "payload":{
+              "template_type": "button",
+              "text": "Welcome to #{@order.business_name}!",
+              "buttons": [
+                {
+                  "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
+                  "type":"json_plugin_url",
+                  "title":"Click here to continue"
+                }
+              ]
+            },
+            "type": "template"
+          }
+        }
+      ]
+    }
+    respond_to do |format|
+      if @order.save
+        format.html { redirect_to @order, notice: 'Order was successfully created.' }
+        format.json { render :json => msg }
+      else
+        format.html { render :new }
+        format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
+      end
+    end
+  end
+
+  def main_menu
+    @fb_user = params[:fb_user]
+    {
+    "messages": [
+      {
+        "attachment": {
+          "payload":{
+            "template_type": "button",
+            "text": "Please choose from the following options:",
+            "buttons": [
+              {
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
+                "type":"json_plugin_url",
+                "title":"Order"
+              },
+              {
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}",
+                "type":"json_plugin_url",
+                "title":"Checkout"
+              }
+            ]
+          },
+          "type": "template"
+        }
+      }
+    ]
+  }
+  end
+
   def list_categories
+    @fb_user = params[:fb_user]
     respond_to do |format|
       msg = {
         "messages": [
@@ -100,7 +164,7 @@ class PagesController < ApplicationController
 
       MenuGroup.all.each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}",
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
@@ -111,6 +175,7 @@ class PagesController < ApplicationController
   end
 
   def list_foods
+    @fb_user = params[:fb_user]
     @category_id = params[:category_id]
     respond_to do |format|
       msg = {
@@ -135,12 +200,12 @@ class PagesController < ApplicationController
           "buttons":[
             {
               "type":"json_plugin_url",
-              "url":"https://pacific-wave-33803.herokuapp.com/pages/add_item.json?item=#{item.name}",
+              "url":"https://pacific-wave-33803.herokuapp.com/pages/add_item.json?item=#{item.name}&fb_user=#{@fb_user}",
               "title":"Order Item"
             },
             {
               "type":"json_plugin_url",
-              "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json",
+              "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
               "title":"Go Back to Categories"
             }
           ]
@@ -148,39 +213,6 @@ class PagesController < ApplicationController
       end
 
       format.json  { render :json => msg } # don't do msg.to_json
-    end
-  end
-
-  def create_order
-    @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => params[:business_name]
-    msg = {
-    "messages": [
-      {"text": "Welcome to #{@order.business_name}."},
-      {
-      "attachment": {
-        "payload":{
-          "template_type": "button",
-          "buttons": [
-            {
-              "url": "http://pastebin.com/raw/bYwUN7un",
-              "type":"json_plugin_url",
-              "title":"Click here to continue"
-            }
-          ]
-        },
-        "type": "template"
-      }
-    }
-      ]
-    }
-    respond_to do |format|
-      if @order.save
-        format.html { redirect_to @order, notice: 'Order was successfully created.' }
-        format.json { render :json => msg }
-      else
-        format.html { render :new }
-        format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
-      end
     end
   end
 
