@@ -155,8 +155,22 @@ class PagesController < ApplicationController
     @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => params[:business_name]
     msg = {
     "messages": [
-      {"text": "Your order was created."},
-      {"text": "Thank you."}
+      {"text": "Welcome to #{@order.business_name}."},
+      {
+      "attachment": {
+        "payload":{
+          "template_type": "button",
+          "buttons": [
+            {
+              "url": "http://pastebin.com/raw/bYwUN7un",
+              "type":"json_plugin_url",
+              "title":"Click here to continue"
+            }
+          ]
+        },
+        "type": "template"
+      }
+    }
       ]
     }
     respond_to do |format|
