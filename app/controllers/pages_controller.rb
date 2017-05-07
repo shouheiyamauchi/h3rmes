@@ -152,7 +152,7 @@ class PagesController < ApplicationController
   end
 
   def create_order
-    @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_id => params[:fb_id], :business_name => params[:business_name]
+    @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => params[:business_name]
     msg = {
     "messages": [
       {"text": "Your order was created."},
