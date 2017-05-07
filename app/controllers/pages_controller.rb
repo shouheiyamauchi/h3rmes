@@ -196,31 +196,31 @@ class PagesController < ApplicationController
       format.json { render :json => msg }
     end
   end
-  #
-  # def find_total
-  #   @fb_user = params[:fb_user]
-  #   @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
-  #   @sum = 0
-  #   @order_list = @order.order_list
-  #
-  #   @order_list.each do |item|
-  #     order_item = MenuItem.where(:name=>item).first
-  #     @sum += order_item.price
-  #   end
-  #
-  #   @order.update_attribute("paid", true)
-  #
-  #   respond_to do |format|
-  #     msg = {
-  #     "messages": [
-  #       {"text": "Your FB id is #{@fb_user}"},
-  #       {"text": "Your order id is #{@order.id}"},
-  #       {"text": "Your order list is #{@order.order_list}"},
-  #       {"text": "The total for your order is $#{@sum}"}
-  #       ]
-  #     }
-  #
-  #     format.json { render :json => msg }
-  #   end
-  # end
+
+  def find_total
+    @fb_user = params[:fb_user]
+    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
+    @sum = 0
+    @order_list = @order.order_list
+
+    @order_list.each do |item|
+      order_item = MenuItem.where(:name=>item).first
+      @sum += order_item.price
+    end
+
+    @order.update_attribute("paid", true)
+
+    respond_to do |format|
+      msg = {
+      "messages": [
+        {"text": "Your FB id is #{@fb_user}"},
+        {"text": "Your order id is #{@order.id}"},
+        {"text": "Your order list is #{@order.order_list}"},
+        {"text": "The total for your order is $#{@sum}"}
+        ]
+      }
+
+      format.json { render :json => msg }
+    end
+  end
 end
