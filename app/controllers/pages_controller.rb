@@ -84,13 +84,27 @@ class PagesController < ApplicationController
   def create_order
     @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => params[:business_name]
     @fb_user = params[:fb_user]
-    msg =
-      {
-       "messages": [
-         {"text": "Welcome to #{@order.business_name}!"}
-       ]
-      }
-
+    msg = {
+      "messages": [
+        {
+          "attachment": {
+            "type": "template",
+            "payload": {
+              "template_type": "button",
+              "text": "Welcome to #{@order.business_name}!",
+              "buttons": [
+                {
+                  "type": "show_block",
+                  "block_name": "Main Menu",
+                  "title": "Continue"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+    
     respond_to do |format|
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
