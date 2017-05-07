@@ -216,4 +216,17 @@ class PagesController < ApplicationController
       format.json  { render :json => msg } # don't do msg.to_json
     end
   end
+
+  def create_order
+    @order = Order.new :table_number => params[:table_number], :fb_id => params[:fb_id], :business_name => params[:business_name]
+    msg = {
+    "messages": [
+      {"text": "Your order was created."},
+      {"text": "Thank you."}
+      ]
+    }
+    if @order.save
+      format.json  { render :json => msg } # don't do msg.to_json
+    end
+  end
 end

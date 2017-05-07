@@ -31,7 +31,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new :user_id => params[:user_id], :order_list => params[:order_list], :table_number => params[:table_number], :paid => params[:paid]
+    @order = Order.new :user_id => params[:user_id], :order_list => params[:order_list], :table_number => params[:table_number], :paid => params[:paid], :fb_id => params[:fb_id], :business_name => params[:business_name]
 
     success_msg = {
     "messages": [
@@ -83,6 +83,6 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:order_list, :user_id, :table_number, :paid)
+      params.require(:order).permit(:order_list, :user_id, :table_number, :paid, :fb_id, :business_name)
     end
 end
