@@ -86,18 +86,18 @@ class PagesController < ApplicationController
         "messages": [
           {
             "attachment": {
-              "type": "template",
-              "payload": {
+              "payload":{
                 "template_type": "button",
-                "text": "Hello!",
+                "text": "test JSON with postback",
                 "buttons": [
                   {
-                    "type": "web_url",
-                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=100",
-                    "title": "Buy Item"
+                    "url": "http://pastebin.com/raw/bYwUN7un",
+                    "type":"json_plugin_url",
+                    "title":"go"
                   }
                 ]
-              }
+              },
+              "type": "template"
             }
           }
         ]
