@@ -105,11 +105,40 @@ class PagesController < ApplicationController
 
       MenuGroup.all.each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "http://pastebin.com/raw/bYwUN7un",
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/params_test.json?category=#{category.name}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
       end
+
+      format.json  { render :json => msg } # don't do msg.to_json
+    end
+  end
+
+  def params_test
+    @category = params[:category]
+
+    respond_to do |format|
+      msg = {
+        "messages": [
+          {
+            "attachment": {
+              "type": "template",
+              "payload": {
+                "template_type": "button",
+                "text": "The category you chose is:",
+                "buttons": [
+                  {
+                    "type": "web_url",
+                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=100",
+                    "title": "#{@category}"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
 
       format.json  { render :json => msg } # don't do msg.to_json
     end
