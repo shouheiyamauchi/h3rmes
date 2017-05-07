@@ -84,27 +84,27 @@ class PagesController < ApplicationController
   def create_order
     @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => params[:business_name]
     @fb_user = params[:fb_user]
-    msg = {
+    msg =
+    {
       "messages": [
         {
           "attachment": {
-            "type": "template",
-            "payload": {
+            "payload":{
               "template_type": "button",
               "text": "Welcome to #{@order.business_name}!",
               "buttons": [
                 {
-                  "type": "show_block",
-                  "block_name": "Main Menu",
-                  "title": "Continue"
+                  "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
+                  "type":"json_plugin_url",
+                  "title":"Click here to continue"
                 }
               ]
-            }
+            },
+            "type": "template"
           }
         }
       ]
     }
-
     respond_to do |format|
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
@@ -117,14 +117,34 @@ class PagesController < ApplicationController
   end
 
   def main_menu
+    @fb_user = params[:fb_user]
     respond_to do |format|
       msg = {
-         "messages": [
-           {"text": "Welcome to our store!"},
-           {"text": "How can I help you?"}
-         ]
-        }
-      format.json  { render :json => msg } # don't do msg.to_json
+        "messages": [
+          {
+            "attachment": {
+              "payload":{
+                "template_type": "button",
+                "text": "Please choose from the following options:",
+                "buttons": [
+                  {
+                    "url": "https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
+                    "type":"json_plugin_url",
+                    "title":"Order"
+                  },
+                  {
+                    "url": "https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}",
+                    "type":"json_plugin_url",
+                    "title":"Checkout"
+                  }
+                ]
+              },
+              "type": "template"
+            }
+          }
+        ]
+      }
+      format.json { render :json => msg }
     end
   end
 
