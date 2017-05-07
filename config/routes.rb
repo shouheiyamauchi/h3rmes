@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'pages/test'
   get 'pages/choose_business'
   get 'pages/list_foods'
+  get 'pages/list_categories'
   resources :orders
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
