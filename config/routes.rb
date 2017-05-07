@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get 'pages/json'
   get 'pages/test'
-  get 'pages/choose_business'
+  get 'pages/check_in'
   get 'pages/list_foods'
   get 'pages/list_categories'
   get 'pages/params_test'

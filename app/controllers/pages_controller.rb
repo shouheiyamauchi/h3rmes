@@ -51,7 +51,8 @@ class PagesController < ApplicationController
     end
   end
 
-  def choose_business
+  def check_in
+    @fb_user = params[:fb_user]
     @business = params[:business]
     @table_no = params[:table_no]
     respond_to do |format|
@@ -150,24 +151,24 @@ class PagesController < ApplicationController
     end
   end
 
-  # def create_order
-  #   @order = Order.new :table_number => params[:table_number], :fb_id => params[:fb_id], :business_name => params[:business_name]
-  #   msg = {
-  #   "messages": [
-  #     {"text": "Your order was created."},
-  #     {"text": "Thank you."}
-  #     ]
-  #   }
-  #   respond_to do |format|
-  #     if @order.save
-  #       format.html { redirect_to @order, notice: 'Order was successfully created.' }
-  #       format.json { render :json => success_msg }
-  #     else
-  #       format.html { render :new }
-  #       format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
-  #     end
-  #   end
-  # end
+  def create_order
+    @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_id => params[:fb_id], :business_name => params[:business_name]
+    msg = {
+    "messages": [
+      {"text": "Your order was created."},
+      {"text": "Thank you."}
+      ]
+    }
+    respond_to do |format|
+      if @order.save
+        format.html { redirect_to @order, notice: 'Order was successfully created.' }
+        format.json { render :json => success_msg }
+      else
+        format.html { render :new }
+        format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
+      end
+    end
+  end
 
   def add_item
     @item = params[:item]
