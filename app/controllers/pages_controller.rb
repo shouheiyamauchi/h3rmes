@@ -84,26 +84,13 @@ class PagesController < ApplicationController
   def create_order
     @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => params[:business_name]
     @fb_user = params[:fb_user]
-    msg = {
-      "messages": [
-        {
-          "attachment": {
-            "payload":{
-              "template_type": "button",
-              "text": "Welcome to #{@order.business_name}!",
-              "buttons": [
-                {
-                  "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
-                  "type":"json_plugin_url",
-                  "title":"Click here to continue"
-                }
-              ]
-            },
-            "type": "template"
-          }
-        }
-      ]
-    }
+    msg =
+      {
+       "messages": [
+         {"text": "Welcome to #{@order.business_name}!"}
+       ]
+      }
+
     respond_to do |format|
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }

@@ -3,13 +3,13 @@ Rails.application.routes.draw do
 
   get 'pages/json'
   get 'pages/test'
-  post 'pages/main_menu'
-  post 'pages/list_foods'
-  post 'pages/list_categories'
-  post 'pages/params_test'
+  get 'pages/main_menu'
+  get 'pages/list_foods'
+  get 'pages/list_categories'
+  get 'pages/params_test'
   post 'pages/create_order'
-  post 'pages/add_item'
-  post 'pages/find_total'
+  get 'pages/add_item'
+  get 'pages/find_total'
   resources :orders
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
