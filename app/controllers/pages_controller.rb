@@ -107,7 +107,7 @@ class PagesController < ApplicationController
         msg[:messages][0][:attachment][:payload][:buttons] << {
                 "url": "http://pastebin.com/raw/bYwUN7un",
                 "type":"json_plugin_url",
-                "title":"<%= category.name %>"
+                "title":"#{category.name}"
               }
       end
 
