@@ -105,7 +105,7 @@ class PagesController < ApplicationController
 
       MenuGroup.all.each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "https://pacific-wave-33803.herokuapp.com/pages/params_test.json?category_id=#{category.id}",
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
