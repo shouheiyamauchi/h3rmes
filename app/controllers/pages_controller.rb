@@ -271,6 +271,7 @@ class PagesController < ApplicationController
     respond_to do |format|
       msg = {
       "messages": [
+        {"text": "Your order id is #{@order.id}"},
         {"text": "Your order list is #{@order_list}"},
         {"text": "The total for your order is $#{@sum}"}
         ]
