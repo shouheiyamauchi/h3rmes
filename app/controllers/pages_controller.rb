@@ -37,50 +37,6 @@ class PagesController < ApplicationController
     end
   end
 
-  def test
-    @user_id = params[:user_id]
-    @fb_id = params[:fb_id]
-    respond_to do |format|
-      msg = {
-      "messages": [
-        {"text": "Welcome to our store! User: #{@user_id}, FB ID: #{@fb_id}"},
-        {"text": "How can I help you?"}
-        ]
-      }
-      format.json  { render :json => msg } # don't do msg.to_json
-    end
-  end
-
-  def check_in
-    @fb_user = params[:fb_user]
-    @business = params[:business]
-    @table_no = params[:table_no]
-    respond_to do |format|
-      msg = {
-      "messages": [
-        {"text": "Welcome to our #{@business}! You're at table no: #{@table_no}"},
-        {
-          "attachment": {
-            "payload":{
-              "template_type": "button",
-              "text": "test JSON with postback",
-              "buttons": [
-                {
-                  "url": "https://pacific-wave-33803.herokuapp.com/pages/test.json?fb_id={{messenger user id}}",
-                  "type":"json_plugin_url",
-                  "title":"go"
-                }
-              ]
-            },
-            "type": "template"
-          }
-        }
-        ]
-      }
-      format.json  { render :json => msg } # don't do msg.to_json
-    end
-  end
-
   def create_order
     @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => params[:business_name]
     @fb_user = params[:fb_user]
@@ -189,7 +145,18 @@ class PagesController < ApplicationController
               "type":"template",
               "payload":{
                 "template_type":"generic",
-                "elements":[]
+                "elements":[{
+                  "title":"#{Category.find(@category_id).name}",
+                  "image_url":"",
+                  "subtitle":"#{Category.find(@category_id).description}",
+                  "buttons":[
+                    {
+                      "type":"json_plugin_url",
+                      "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
+                      "title":"Go Back to Categories"
+                    }
+                  ]
+                }]
               }
             }
           }
@@ -206,11 +173,6 @@ class PagesController < ApplicationController
               "type":"json_plugin_url",
               "url":"https://pacific-wave-33803.herokuapp.com/pages/add_item.json?item=#{item.name}&fb_user=#{@fb_user}",
               "title":"Order Item"
-            },
-            {
-              "type":"json_plugin_url",
-              "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
-              "title":"Go Back to Categories"
             }
           ]
         }

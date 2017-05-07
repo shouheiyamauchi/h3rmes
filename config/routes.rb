@@ -2,12 +2,10 @@ Rails.application.routes.draw do
   root 'pages#home'
 
   get 'pages/json'
-  get 'pages/test'
+  post 'pages/create_order'
   post 'pages/main_menu'
   post 'pages/list_foods'
   post 'pages/list_categories'
-  post 'pages/params_test'
-  post 'pages/create_order'
   post 'pages/add_item'
   post 'pages/find_total'
   resources :orders
