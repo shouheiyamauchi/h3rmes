@@ -241,11 +241,16 @@ class PagesController < ApplicationController
     @fb_user = params[:fb_user]
     @order = Order.where(:fb_user=>@fb_user).first
 
+    @order_list = @order.order_list
+    @order_list << @item
+
+    @order.update_attribute("order_list", @order_list)
+
     respond_to do |format|
       msg = {
       "messages": [
-        {"text": @order.id},
-        {"text": "Thank you."}
+        {"text": "You order id is #@order.id}"},
+        {"text": "Your current order includers: #{@order.order_list}"}
         ]
       }
 
