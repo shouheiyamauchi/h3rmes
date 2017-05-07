@@ -103,13 +103,13 @@ class PagesController < ApplicationController
         ]
       }
 
-      MenuGroup.all.each do |category|
-        msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}",
-                "type":"json_plugin_url",
-                "title":"#{category.name}"
-              }
-      end
+      # MenuGroup.all.each do |category|
+      #   msg[:messages][0][:attachment][:payload][:buttons] << {
+      #           "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}",
+      #           "type":"json_plugin_url",
+      #           "title":"#{category.name}"
+      #         }
+      # end
 
       format.json  { render :json => msg } # don't do msg.to_json
     end
