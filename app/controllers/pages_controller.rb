@@ -195,13 +195,42 @@ class PagesController < ApplicationController
     respond_to do |format|
       msg = {
       "messages": [
-        {"text": "You have ordered: #{@item}"},
-        {"text": "Your current order includes: #{@order.order_list}"},
-        {"text": "Your details are as follows: fb_id - #{@fb_user}, order id - #{@order.id}"}
+        {"text": "You have ordered: #{@item} x 1"}
         ]
       }
 
       format.json { render :json => msg }
+
+      msg2 = {
+        "messages": [
+          {
+            "attachment": {
+              "type": "template",
+              "payload": {
+                "template_type": "button",
+                "text": "Please choose your menu:",
+                "buttons": []
+              }
+            }
+          }
+        ]
+      }
+
+      MenuGroup.all.each do |category|
+        msg2[:messages][0][:attachment][:payload][:buttons] << {
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}",
+                "type":"json_plugin_url",
+                "title":"#{category.name}"
+              }
+      end
+
+      msg2[:messages][0][:attachment][:payload][:buttons] << {
+              "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
+              "type":"json_plugin_url",
+              "title":"Go Back"
+            }
+
+      format.json  { render :json => msg2 } # don't do msg.to_json
     end
   end
 
