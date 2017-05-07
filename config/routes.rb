@@ -8,8 +8,8 @@ Rails.application.routes.draw do
   get 'pages/list_categories'
   get 'pages/params_test'
   post 'pages/create_order'
-  post 'pages/add_item'
-  post 'pages/find_total' 
+  get 'pages/add_item'
+  post 'pages/find_total'
   resources :orders
 
   devise_for :users, controllers: { registrations: 'users/registrations' }

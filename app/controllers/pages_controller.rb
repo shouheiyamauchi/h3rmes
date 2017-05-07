@@ -139,7 +139,7 @@ class PagesController < ApplicationController
             },
             {
               "type":"json_plugin_url",
-              "url":"https://pacific-wave-33803.herokuapp.com/pages/list_foods.json",
+              "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json",
               "title":"Go Back to Categories"
             }
           ]
