@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post 'pages/list_categories'
   post 'pages/add_item'
   post 'pages/find_total'
+  post 'pages/make_payment'
   resources :orders
 
   devise_for :users, controllers: { registrations: 'users/registrations' }

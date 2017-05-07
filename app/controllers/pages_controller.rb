@@ -237,37 +237,53 @@ class PagesController < ApplicationController
       @sum += order_item.price
     end
 
-    @order.update_attribute("paid", true)
+
 
     respond_to do |format|
       msg = {
       "messages": [
         # {"text": "Your FB id is #{@fb_user}"},
         {"text": "Your table number is #{@order.table_number}"},
-        {"text": "You ordered the following:"},
-        {
-          "attachment": {
-            "payload":{
-              "template_type": "button",
-              "text": "test JSON with postback",
-              "buttons": [
-                {
-                  "url": "http://pastebin.com/raw/bYwUN7un",
-                  "type":"json_plugin_url",
-                  "title":"go"
-                }
-              ]
-            },
-            "type": "template"
-          }
-        }
+        {"text": "You ordered the following:"}
         ]
       }
 
       @order.order_list.each do |item|
         msg[:messages] << {"text": "#{item}...#{MenuItem.where(:name=>item).first.price}"}
       end
-      msg[:messages] << {"text": "The total for your order is $#{@sum}"}
+      msg[:messages] << {
+        "attachment": {
+          "payload":{
+            "template_type": "button",
+            "text": "The total for your order is $#{@sum}",
+            "buttons": [
+              {
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/make_payment.json?fb_user=#{@fb_user}",
+                "type":"json_plugin_url",
+                "title":"Make Payment"
+              }
+            ]
+          },
+          "type": "template"
+        }
+      }
+
+      format.json { render :json => msg }
+    end
+  end
+
+  def make_payment
+    @fb_user = params[:fb_user]
+    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
+    @order.update_attribute("paid", true)
+
+    respond_to do |format|
+      msg = {
+      "messages": [
+        # {"text": "Your FB id is #{@fb_user}"},
+        {"text": "Thank you for your payment! Please visit #{@order.business_name} again."}
+        ]
+      }
 
       format.json { render :json => msg }
     end
