@@ -271,7 +271,8 @@ class PagesController < ApplicationController
     respond_to do |format|
       msg = {
       "messages": [
-        {"text": "The total for your order is $#{@sum}}"}
+        {"text": "Your order list is #{@order_last}"}
+        {"text": "The total for your order is $#{@sum}"}
         ]
       }
 
