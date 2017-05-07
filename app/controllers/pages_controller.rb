@@ -259,6 +259,7 @@ class PagesController < ApplicationController
   end
 
   def find_total
+    @fb_id = :fb_user
     @order = Order.where(:fb_user=>@fb_user).first
     @sum = 0
     @order_list = @order.order_list
@@ -271,8 +272,9 @@ class PagesController < ApplicationController
     respond_to do |format|
       msg = {
       "messages": [
+        {"text": "Your FB id is #{@fb_id}"},
         {"text": "Your order id is #{@order.id}"},
-        {"text": "Your order list is #{@order_list}"},
+        {"text": "Your order list is #{@order.order_list}"},
         {"text": "The total for your order is $#{@sum}"}
         ]
       }
