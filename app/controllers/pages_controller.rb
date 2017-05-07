@@ -105,7 +105,7 @@ class PagesController < ApplicationController
 
       MenuGroup.all.each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "https://pacific-wave-33803.herokuapp.com/pages/params_test.json?category=#{category.name}",
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/params_test.json?category_id=#{category.id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
@@ -116,7 +116,8 @@ class PagesController < ApplicationController
   end
 
   def params_test
-    @category = params[:category]
+    @category_id = params[:category_id]
+    MenuItem.where(:menu_group_id=>@category_id).each do |category|
 
     respond_to do |format|
       msg = {
@@ -145,6 +146,7 @@ class PagesController < ApplicationController
   end
 
   def list_foods
+    @category_id = params[:category_id]
     respond_to do |format|
       msg = {
        "messages": [
@@ -153,65 +155,32 @@ class PagesController < ApplicationController
               "type":"template",
               "payload":{
                 "template_type":"generic",
-                "elements":[
-                  {
-                    "title":"Classic White T-Shirt",
-                    "image_url":"https://h3rmes.s3.amazonaws.com/uploads/menu_item/image/2/4.jpg",
-                    "subtitle":"Soft white cotton t-shirt is back in style",
-                    "buttons":[
-                      {
-                        "type":"web_url",
-                        "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
-                        "title":"View Item"
-                      },
-                      {
-                        "type":"web_url",
-                        "url":"https://petersapparel.parseapp.com/buy_item?item_id=100",
-                        "title":"Buy Item"
-                      }
-                    ]
-                  },
-                  {
-                    "title":"Classic Grey T-Shirt",
-                    "image_url":"https://h3rmes.s3.amazonaws.com/uploads/menu_item/image/4/5.jpg",
-                    "subtitle":"Soft gray cotton t-shirt is back in style",
-                    "buttons":[
-                      {
-                        "type":"web_url",
-                        "url":"https://petersapparel.parseapp.com/view_item?item_id=101",
-                        "title":"View Item"
-                      },
-                      {
-                        "type":"web_url",
-                        "url":"https://petersapparel.parseapp.com/buy_item?item_id=101",
-                        "title":"Buy Item"
-                      }
-                    ]
-                  }
-                ]
+                "elements":[]
               }
             }
           }
         ]
       }
 
-      msg[:messages][0][:attachment][:payload][:elements] << {
-        "title":"Classic White T-Shirt",
-        "image_url":"https://h3rmes.s3.amazonaws.com/uploads/menu_item/image/2/4.jpg",
-        "subtitle":"Soft white cotton t-shirt is back in style",
-        "buttons":[
-          {
-            "type":"web_url",
-            "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
-            "title":"View Item"
-          },
-          {
-            "type":"web_url",
-            "url":"https://petersapparel.parseapp.com/buy_item?item_id=100",
-            "title":"Buy Item"
-          }
-        ]
-      }
+      MenuItem.where(:menu_group_id=>@category_id).each do |item|
+        msg[:messages][0][:attachment][:payload][:elements] << {
+          "title":"#{item.name}...$#{item.price}",
+          "image_url":"#{item.image.url}",
+          "subtitle":"#{item.description}",
+          "buttons":[
+            {
+              "type":"web_url",
+              "url":"https://petersapparel.parseapp.com/view_item?item_id=100",
+              "title":"View Item"
+            },
+            {
+              "type":"web_url",
+              "url":"https://petersapparel.parseapp.com/buy_item?item_id=100",
+              "title":"Buy Item"
+            }
+          ]
+        }
+      end
 
       format.json  { render :json => msg } # don't do msg.to_json
     end
@@ -249,7 +218,7 @@ class PagesController < ApplicationController
     respond_to do |format|
       msg = {
       "messages": [
-        {"text": "You order id is #{@order.id}}"},
+        {"text": "You order id is #{@order.id}"},
         {"text": "Your current orde includers: #{@order.order_list}"}
         ]
       }
