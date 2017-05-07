@@ -103,7 +103,7 @@ class PagesController < ApplicationController
         ]
       }
 
-      MenuGroup.all do |category|
+      MenuGroup.all.each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
                 "url": "http://pastebin.com/raw/bYwUN7un",
                 "type":"json_plugin_url",
