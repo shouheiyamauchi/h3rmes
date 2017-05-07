@@ -242,12 +242,16 @@ class PagesController < ApplicationController
     respond_to do |format|
       msg = {
       "messages": [
-        {"text": "Your FB id is #{@fb_user}"},
-        {"text": "Your order id is #{@order.id}"},
-        {"text": "Your order list is #{@order.order_list}"},
-        {"text": "The total for your order is $#{@sum}"}
+        # {"text": "Your FB id is #{@fb_user}"},
+        {"text": "Your table number is #{@order.table_number}"},
+        {"text": "You ordered the following:"}
         ]
       }
+
+      @order.order_list.each do |item|
+        msg[:messages] << {"text": item}
+      end
+      msg[:messages] << {"text": "The total for your order is $#{@sum}"}
 
       format.json { render :json => msg }
     end
