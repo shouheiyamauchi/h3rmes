@@ -249,7 +249,7 @@ class PagesController < ApplicationController
       }
 
       @order.order_list.each do |item|
-        msg[:messages] << {"text": "#{item}...#{MenuItem.where(:name=>item).first.price}"}
+        msg[:messages] << {"text": "#{item}...$#{MenuItem.where(:name=>item).first.price}"}
       end
       msg[:messages] << {
         "attachment": {
