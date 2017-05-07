@@ -244,12 +244,28 @@ class PagesController < ApplicationController
       "messages": [
         # {"text": "Your FB id is #{@fb_user}"},
         {"text": "Your table number is #{@order.table_number}"},
-        {"text": "You ordered the following:"}
+        {"text": "You ordered the following:"},
+        {
+          "attachment": {
+            "payload":{
+              "template_type": "button",
+              "text": "test JSON with postback",
+              "buttons": [
+                {
+                  "url": "http://pastebin.com/raw/bYwUN7un",
+                  "type":"json_plugin_url",
+                  "title":"go"
+                }
+              ]
+            },
+            "type": "template"
+          }
+        }
         ]
       }
 
       @order.order_list.each do |item|
-        msg[:messages] << {"text": item}
+        msg[:messages] << {"text": "#{item}...#{MenuItem.where(:name=>item).first.price}"}
       end
       msg[:messages] << {"text": "The total for your order is $#{@sum}"}
 
