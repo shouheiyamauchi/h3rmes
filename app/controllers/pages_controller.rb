@@ -80,6 +80,46 @@ class PagesController < ApplicationController
     end
   end
 
+  def list_categories
+    respond_to do |format|
+      msg = {
+        "messages": [
+          {
+            "attachment": {
+              "type": "template",
+              "payload": {
+                "template_type": "button",
+                "text": "Hello!",
+                "buttons": [
+                  {
+                    "type": "show_block",
+                    "block_name": "some block name",
+                    "title": "Show the block!"
+                  },
+                  {
+                    "type": "web_url",
+                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=100",
+                    "title": "Buy Item"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+
+      MenuGroup.all do |category|
+        msg[:messages][0][:attachment][:payload][:buttons] << {
+                "url": "http://pastebin.com/raw/bYwUN7un",
+                "type":"json_plugin_url",
+                "title":"<%= category.name %>"
+              }
+      end
+
+      format.json  { render :json => msg } # don't do msg.to_json
+    end
+  end
+
   def list_foods
     respond_to do |format|
       msg = {
