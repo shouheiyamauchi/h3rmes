@@ -239,7 +239,7 @@ class PagesController < ApplicationController
   def add_item
     @item = "Curry"
     @fb_user = params[:fb_user]
-    @order = Order.where(:fb_user=>@fb_user).first
+    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
 
     @order_list = @order.order_list
     @order_list << @item
