@@ -155,47 +155,47 @@ class PagesController < ApplicationController
       format.json  { render :json => msg } # don't do msg.to_json
     end
   end
-  #
-  # def create_order
-  #   @order = Order.new :table_number => params[:table_number], :fb_id => params[:fb_id], :business_name => params[:business_name]
-  #   msg = {
-  #   "messages": [
-  #     {"text": "Your order was created."},
-  #     {"text": "Thank you."}
-  #     ]
-  #   }
-  #   respond_to do |format|
-  #     if @order.save
-  #       format.html { redirect_to @order, notice: 'Order was successfully created.' }
-  #       format.json { render :json => success_msg }
-  #     else
-  #       format.html { render :new }
-  #       format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
-  #     end
-  #   end
-  # end
-  #
-  # def add_item
-  #   @item = "Curry"
-  #   @fb_user = params[:fb_user]
-  #   @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
-  #
-  #   @order_list = @order.order_list
-  #   @order_list << @item
-  #
-  #   @order.update_attribute("order_list", @order_list)
-  #
-  #   respond_to do |format|
-  #     msg = {
-  #     "messages": [
-  #       {"text": "You order id is #{@order.id}"},
-  #       {"text": "Your current orde includers: #{@order.order_list}"}
-  #       ]
-  #     }
-  #
-  #     format.json { render :json => msg }
-  #   end
-  # end
+
+  def create_order
+    @order = Order.new :table_number => params[:table_number], :fb_id => params[:fb_id], :business_name => params[:business_name]
+    msg = {
+    "messages": [
+      {"text": "Your order was created."},
+      {"text": "Thank you."}
+      ]
+    }
+    respond_to do |format|
+      if @order.save
+        format.html { redirect_to @order, notice: 'Order was successfully created.' }
+        format.json { render :json => success_msg }
+      else
+        format.html { render :new }
+        format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
+      end
+    end
+  end
+
+  def add_item
+    @item = "Curry"
+    @fb_user = params[:fb_user]
+    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
+
+    @order_list = @order.order_list
+    @order_list << @item
+
+    @order.update_attribute("order_list", @order_list)
+
+    respond_to do |format|
+      msg = {
+      "messages": [
+        {"text": "You order id is #{@order.id}"},
+        {"text": "Your current orde includers: #{@order.order_list}"}
+        ]
+      }
+
+      format.json { render :json => msg }
+    end
+  end
   #
   # def find_total
   #   @fb_user = params[:fb_user]
