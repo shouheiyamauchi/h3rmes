@@ -183,7 +183,8 @@ class PagesController < ApplicationController
       msg = {
       "messages": [
         {"text": "You have ordered: #{@item}"},
-        {"text": "Your current order includes: #{@order.order_list}"}
+        {"text": "Your current order includes: #{@order.order_list}"},
+        {"text": "Your details are as follows: fb_id - #{@fb_user}, order id - #{@order.id}"}
         ]
       }
 
