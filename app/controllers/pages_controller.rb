@@ -104,7 +104,7 @@ class PagesController < ApplicationController
         }
       ]
     }
-    
+
     respond_to do |format|
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
@@ -118,31 +118,34 @@ class PagesController < ApplicationController
 
   def main_menu
     @fb_user = params[:fb_user]
-    {
-    "messages": [
-      {
-        "attachment": {
-          "payload":{
-            "template_type": "button",
-            "text": "Please choose from the following options:",
-            "buttons": [
-              {
-                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
-                "type":"json_plugin_url",
-                "title":"Order"
+    respond_to do |format|
+      msg = {
+        "messages": [
+          {
+            "attachment": {
+              "payload":{
+                "template_type": "button",
+                "text": "Please choose from the following options:",
+                "buttons": [
+                  {
+                    "url": "https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
+                    "type":"json_plugin_url",
+                    "title":"Order"
+                  },
+                  {
+                    "url": "https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}",
+                    "type":"json_plugin_url",
+                    "title":"Checkout"
+                  }
+                ]
               },
-              {
-                "url": "https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}",
-                "type":"json_plugin_url",
-                "title":"Checkout"
-              }
-            ]
-          },
-          "type": "template"
-        }
+              "type": "template"
+            }
+          }
+        ]
       }
-    ]
-  }
+      format.json  { render :json => msg } # don't do msg.to_json
+    end
   end
 
   def list_categories
