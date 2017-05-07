@@ -105,7 +105,7 @@ class PagesController < ApplicationController
 
       MenuGroup.all.each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}",
+                "url": "/pages/list_foods.json?category_id=#{category.id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
@@ -176,7 +176,7 @@ class PagesController < ApplicationController
   end
 
   def add_item
-    @item = "Curry"
+    @item = params[:item]
     @fb_user = params[:fb_user]
     @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
 
