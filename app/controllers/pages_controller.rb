@@ -52,7 +52,7 @@ class PagesController < ApplicationController
                 {
                   "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
                   "type":"json_plugin_url",
-                  "title":"Click here to continue"
+                  "title":"Continue"
                 }
               ]
             },
@@ -115,11 +115,7 @@ class PagesController < ApplicationController
               "payload": {
                 "template_type": "button",
                 "text": "Please choose your menu:",
-                "buttons": [{
-                        "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
-                        "type":"json_plugin_url",
-                        "title":"Go Back"
-                      }]
+                "buttons": []
               }
             }
           }
@@ -133,6 +129,12 @@ class PagesController < ApplicationController
                 "title":"#{category.name}"
               }
       end
+
+      msg[:messages][0][:attachment][:payload][:buttons] << {
+              "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
+              "type":"json_plugin_url",
+              "title":"Go Back"
+            }
 
       format.json  { render :json => msg } # don't do msg.to_json
     end
