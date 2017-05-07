@@ -237,7 +237,7 @@ class PagesController < ApplicationController
   end
 
   def add_item
-    @item = "curry"
+    @item = "Curry"
     @fb_user = params[:fb_user]
     @order = Order.where(:fb_user=>@fb_user).first
 
@@ -249,13 +249,33 @@ class PagesController < ApplicationController
     respond_to do |format|
       msg = {
       "messages": [
-        {"text": "You order id is #@order.id}"},
-        {"text": "Your current order includers: #{@order.order_list}"}
+        {"text": "You order id is #{@order.id}}"},
+        {"text": "Your current orde includers: #{@order.order_list}"}
         ]
       }
 
       format.json { render :json => msg }
     end
+  end
 
+  def find_total
+    @order = Order.where(:fb_user=>@fb_user).first
+    @sum = 0
+    @order_list = @order.order_list
+
+    @order_list.each do |item|
+      order_item = MenuItem.where(:name=>item).first
+      @sum += order_item.price
+    end
+
+    respond_to do |format|
+      msg = {
+      "messages": [
+        {"text": "The total for your order is $#{@sum}}"}
+        ]
+      }
+
+      format.json { render :json => msg }
+    end
   end
 end
