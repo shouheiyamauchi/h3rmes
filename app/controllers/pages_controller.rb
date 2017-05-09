@@ -166,7 +166,7 @@ class PagesController < ApplicationController
           "buttons":[
             {
               "type":"json_plugin_url",
-              "url":"https://pacific-wave-33803.herokuapp.com/pages/add_item.json?item=#{item.name}&fb_user=#{@fb_user}",
+              "url":"https://pacific-wave-33803.herokuapp.com/pages/add_item.json?item=#{URI.encode(item.name)}&fb_user=#{@fb_user}",
               "title":"Order Item"
             },
             {
