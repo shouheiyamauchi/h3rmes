@@ -4,7 +4,7 @@ class MenuGroupsController < ApplicationController
   # GET /menu_groups
   # GET /menu_groups.json
   def index
-    @menu_groups = MenuGroup.all
+    @menu_groups = MenuGroup.where(:user_id => current_user.id).order(id: :asc)
   end
 
   # GET /menu_groups/1
