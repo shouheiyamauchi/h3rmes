@@ -1,47 +1,79 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
 
+  # pacific-wave-33803.herokuapp.com
+
   def home
   end
 
-  def json
-    @variable = "hello there"
-    respond_to do |format|
-      msg = {
-      "messages": [
-          {
-            "attachment": {
-              "type": "template",
-              "payload": {
-                "template_type": "button",
-                "text": "Total Price: #{@variable}<Insert Total>
+  def list_business
+    @fb_user = params[:fb_user]
+    @business = User.where("lower(name) like ?", "%#{params[:business_name]}%".downcase).order(id: :asc)
+    @table_number = params[:table_number]
 
-                < Display total items >
-                Would you like to pay now?",
-                "buttons": [
-                  {
-                    "type": "show_block",
-                    "block_name": "Pay",
-                    "title": "Yes"
-                  },
-                  {
-                    "type": "show_block",
-                    "block_name": "Order - FB Cafe",
-                    "title": "No"
-                  }
-                ]
+    respond_to do |format|
+      # Finalize any outstanding orders
+      if Order.where(:fb_user=>@fb_user, :paid=>false).count > 0
+        msg = {
+          "messages": [
+            {
+              "attachment": {
+                "payload":{
+                  "template_type": "button",
+                  "text": "Please pay an outstanding order:",
+                  "buttons": [
+                    {
+                      "url":"https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}",
+                      "type":"json_plugin_url",
+                      "title":"Finalize Order"
+                    }
+                  ]
+                },
+                "type": "template"
               }
             }
-          }
-        ]
-      }
+          ]
+        }
+      else
+        msg = {
+          "messages": [
+            {
+              "attachment": {
+                "type": "template",
+                "payload": {
+                  "template_type": "button",
+                  "text": "Please choose your business:",
+                  "buttons": []
+                }
+              }
+            }
+          ]
+        }
+
+        @business.all.each do |business|
+          msg[:messages][0][:attachment][:payload][:buttons] << {
+                  "url": "https://pacific-wave-33803.herokuapp.com/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
+                  "type":"json_plugin_url",
+                  "title":"#{business.name}"
+                }
+        end
+
+        msg[:messages][0][:attachment][:payload][:buttons] << {
+                "url":"https://pacific-wave-33803.herokuapp.com/pages/check_in_block",
+                "type":"json_plugin_url",
+                "title":"Go Back"
+              }
+
+
+      end
       format.json  { render :json => msg } # don't do msg.to_json
     end
   end
 
   def create_order
-    @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => params[:business_name]
     @fb_user = params[:fb_user]
+    @business_id = params[:business_id]
+    @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => User.find(@business_id).name
     msg =
     {
       "messages": [
@@ -52,7 +84,7 @@ class PagesController < ApplicationController
               "text": "Welcome to #{@order.business_name}!",
               "buttons": [
                 {
-                  "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
+                  "url":"https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
                   "type":"json_plugin_url",
                   "title":"Continue"
                 }
@@ -76,6 +108,7 @@ class PagesController < ApplicationController
 
   def main_menu
     @fb_user = params[:fb_user]
+    @business_id = params[:business_id]
     respond_to do |format|
       msg = {
         "messages": [
@@ -86,12 +119,12 @@ class PagesController < ApplicationController
                 "text": "Please choose from the following options:",
                 "buttons": [
                   {
-                    "url": "https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
+                    "url": "https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
                     "type":"json_plugin_url",
                     "title":"Order"
                   },
                   {
-                    "url": "https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}",
+                    "url": "https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
                     "type":"json_plugin_url",
                     "title":"Checkout"
                   }
@@ -108,6 +141,7 @@ class PagesController < ApplicationController
 
   def list_categories
     @fb_user = params[:fb_user]
+    @business_id = params[:business_id]
     respond_to do |format|
       msg = {
         "messages": [
@@ -124,16 +158,16 @@ class PagesController < ApplicationController
         ]
       }
 
-      MenuGroup.all.each do |category|
+      MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}",
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
       end
 
       msg[:messages][0][:attachment][:payload][:buttons] << {
-              "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
+              "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
               "type":"json_plugin_url",
               "title":"Go Back"
             }
@@ -144,6 +178,7 @@ class PagesController < ApplicationController
 
   def list_foods
     @fb_user = params[:fb_user]
+    @business_id = params[:business_id]
     @category_id = params[:category_id]
     respond_to do |format|
       msg = {
@@ -168,12 +203,12 @@ class PagesController < ApplicationController
           "buttons":[
             {
               "type":"json_plugin_url",
-              "url":"https://pacific-wave-33803.herokuapp.com/pages/add_item.json?item=#{URI.encode(item.name)}&fb_user=#{@fb_user}",
+              "url":"https://pacific-wave-33803.herokuapp.com/pages/add_item.json?item=#{URI.encode(item.name)}&fb_user=#{@fb_user}&business_id=#{@business_id}",
               "title":"Order Item"
             },
             {
               "type":"json_plugin_url",
-              "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}",
+              "url":"https://pacific-wave-33803.herokuapp.com/pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
               "title":"Go Back"
             }
           ]
@@ -185,8 +220,9 @@ class PagesController < ApplicationController
   end
 
   def add_item
-    @item = params[:item]
     @fb_user = params[:fb_user]
+    @business_id = params[:business_id]
+    @item = params[:item]
     @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
 
     @order_list = @order.order_list
@@ -210,16 +246,16 @@ class PagesController < ApplicationController
         ]
       }
 
-      MenuGroup.all.each do |category|
+      MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}",
+                "url": "https://pacific-wave-33803.herokuapp.com/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
       end
 
       msg[:messages][0][:attachment][:payload][:buttons] << {
-              "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}",
+              "url": "https://pacific-wave-33803.herokuapp.com/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
               "type":"json_plugin_url",
               "title":"Go Back"
             }
@@ -230,6 +266,7 @@ class PagesController < ApplicationController
 
   def find_total
     @fb_user = params[:fb_user]
+    @business_id = params[:business_id]
     @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
     @sum = 0
     @order_list = @order.order_list

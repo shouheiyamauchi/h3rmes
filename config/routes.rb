@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'pages#home'
 
-  get 'pages/json'
+  post 'pages/list_business'
   post 'pages/create_order'
   post 'pages/main_menu'
   post 'pages/list_foods'
