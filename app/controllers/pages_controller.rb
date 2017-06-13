@@ -20,12 +20,12 @@ class PagesController < ApplicationController
               "attachment": {
                 "payload":{
                   "template_type": "button",
-                  "text": "Please pay an outstanding order:",
+                  "text": "Please pay an outstanding order - User: #{@fb_user}:",
                   "buttons": [
                     {
                       "url":"https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}",
                       "type":"json_plugin_url",
-                      "title":"Finalize Order - User: #{@fb_user}"
+                      "title":"Finalize Order"
                     }
                   ]
                 },
