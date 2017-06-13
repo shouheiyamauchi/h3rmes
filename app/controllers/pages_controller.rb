@@ -25,7 +25,7 @@ class PagesController < ApplicationController
                     {
                       "url":"https://pacific-wave-33803.herokuapp.com/pages/find_total.json?fb_user=#{@fb_user}",
                       "type":"json_plugin_url",
-                      "title":"Finalize Order"
+                      "title":"Finalize Order - User: #{@fb_user}"
                     }
                   ]
                 },
