@@ -42,7 +42,7 @@ class PagesController < ApplicationController
                 "type": "template",
                 "payload": {
                   "template_type": "button",
-                  "text": "Please choose your business:",
+                  "text": "Please choose your restaurant:",
                   "buttons": []
                 }
               }
@@ -73,7 +73,7 @@ class PagesController < ApplicationController
   def create_order
     @fb_user = params[:fb_user]
     @business_id = params[:business_id]
-    @order = Order.new :user_id => params[:user_id], :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => User.find(@business_id).name
+    @order = Order.new :user_id => @business_id, :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => User.find(@business_id).name
     msg =
     {
       "messages": [
