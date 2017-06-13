@@ -1,24 +1,9 @@
-# README
+# h3rmes
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Facebook chatbot application which allows you to make orders in restaurants all through messenger.
 
-Things you may want to cover:
+This application was developed for the 2017 Sydney regional Facebook Hackathon.
 
-* Ruby version
+The Facebook page to test the chatbot is: https://www.facebook.com/H3rmes-Beta-255995831536465/ (a sample business name already set up is "FB Cafe")
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+You are able to add a business and the menu from: https://h3rmes.herokuapp.com/
