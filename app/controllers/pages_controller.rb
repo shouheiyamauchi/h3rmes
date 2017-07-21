@@ -23,7 +23,7 @@ class PagesController < ApplicationController
                   "text": "Please pay an outstanding order - User: #{@fb_user}:",
                   "buttons": [
                     {
-                      "url":"https://h3rmes.herokuapp.com//pages/find_total.json?fb_user=#{@fb_user}",
+                      "url":"ENV["APP_URL"]/pages/find_total.json?fb_user=#{@fb_user}",
                       "type":"json_plugin_url",
                       "title":"Finalize Order"
                     }
@@ -52,14 +52,14 @@ class PagesController < ApplicationController
 
         @business.all.each do |business|
           msg[:messages][0][:attachment][:payload][:buttons] << {
-                  "url": "https://h3rmes.herokuapp.com//pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
+                  "url": "ENV["APP_URL"]/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
                   "type":"json_plugin_url",
                   "title":"#{business.name}"
                 }
         end
 
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url":"https://h3rmes.herokuapp.com//pages/check_in_block",
+                "url":"ENV["APP_URL"]/pages/check_in_block",
                 "type":"json_plugin_url",
                 "title":"Go Back"
               }
@@ -84,7 +84,7 @@ class PagesController < ApplicationController
               "text": "Welcome to #{@order.business_name}!",
               "buttons": [
                 {
-                  "url":"https://h3rmes.herokuapp.com//pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
+                  "url":"ENV["APP_URL"]/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
                   "type":"json_plugin_url",
                   "title":"Continue"
                 }
@@ -119,12 +119,12 @@ class PagesController < ApplicationController
                 "text": "Please choose from the following options:",
                 "buttons": [
                   {
-                    "url": "https://h3rmes.herokuapp.com//pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
+                    "url": "ENV["APP_URL"]/pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
                     "type":"json_plugin_url",
                     "title":"Order"
                   },
                   {
-                    "url": "https://h3rmes.herokuapp.com//pages/find_total.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
+                    "url": "ENV["APP_URL"]/pages/find_total.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
                     "type":"json_plugin_url",
                     "title":"Checkout"
                   }
@@ -160,14 +160,14 @@ class PagesController < ApplicationController
 
       MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "https://h3rmes.herokuapp.com//pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
+                "url": "ENV["APP_URL"]/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
       end
 
       msg[:messages][0][:attachment][:payload][:buttons] << {
-              "url": "https://h3rmes.herokuapp.com//pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
+              "url": "ENV["APP_URL"]/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
               "type":"json_plugin_url",
               "title":"Go Back"
             }
@@ -203,12 +203,12 @@ class PagesController < ApplicationController
           "buttons":[
             {
               "type":"json_plugin_url",
-              "url":"https://h3rmes.herokuapp.com//pages/add_item.json?item=#{URI.encode(item.name)}&fb_user=#{@fb_user}&business_id=#{@business_id}",
+              "url":"ENV["APP_URL"]/pages/add_item.json?item=#{URI.encode(item.name)}&fb_user=#{@fb_user}&business_id=#{@business_id}",
               "title":"Order Item"
             },
             {
               "type":"json_plugin_url",
-              "url":"https://h3rmes.herokuapp.com//pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
+              "url":"ENV["APP_URL"]/pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
               "title":"Go Back"
             }
           ]
@@ -248,14 +248,14 @@ class PagesController < ApplicationController
 
       MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "https://h3rmes.herokuapp.com//pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
+                "url": "ENV["APP_URL"]/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
       end
 
       msg[:messages][0][:attachment][:payload][:buttons] << {
-              "url": "https://h3rmes.herokuapp.com//pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
+              "url": "ENV["APP_URL"]/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
               "type":"json_plugin_url",
               "title":"Go Back"
             }
@@ -297,7 +297,7 @@ class PagesController < ApplicationController
             "text": "The total for your order is $#{@sum}",
             "buttons": [
               {
-                "url": "https://h3rmes.herokuapp.com//pages/make_payment.json?fb_user=#{@fb_user}",
+                "url": "ENV["APP_URL"]/pages/make_payment.json?fb_user=#{@fb_user}",
                 "type":"json_plugin_url",
                 "title":"Make Payment"
               }
