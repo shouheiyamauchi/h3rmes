@@ -6,4 +6,4 @@
 
 - The Facebook page to test the chatbot is: https://www.facebook.com/H3rmes-Beta-255995831536465/ (a sample business name already set up is "FB Cafe")
 
-- You are able to add a business and the menu from: ENV["APP_URL"]
+- You are able to add a business and the menu from: #{ENV["APP_URL"]}
