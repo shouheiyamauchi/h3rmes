@@ -13,14 +13,13 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       # Finalize any outstanding orders
-      # if Order.where(:fb_user=>@fb_user, :paid=>false).count > 0
       if Order.check_outstanding(@fb_user)
         msg = {
           "messages": [
             {
               "attachment": {
                 "payload":{
-                  "template_type": "list",
+                  "template_type": "button",
                   "text": "Please pay an outstanding order - User: #{@fb_user}:",
                   "buttons": [
                     {
