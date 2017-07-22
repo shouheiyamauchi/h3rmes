@@ -7,6 +7,7 @@ class PagesController < ApplicationController
   end
 
   def list_business
+    puts "The sessions ID is: #{session[:fb_user]}"
     session[:fb_user] = params[:fb_user]
     @business = User.where("lower(name) like ?", "%#{params[:business_name]}%".downcase).order(id: :asc)
     @table_number = params[:table_number]
