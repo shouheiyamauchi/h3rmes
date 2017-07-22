@@ -50,13 +50,14 @@ class PagesController < ApplicationController
             }
           ]
         }
-
-        @business.all.each do |business|
-          msg[:messages][0][:attachment][:payload][:buttons] << {
-                  "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
-                  "type":"json_plugin_url",
-                  "title":"#{business.name}"
-                }
+        10.times do
+          @business.all.each do |business|
+            msg[:messages][0][:attachment][:payload][:buttons] << {
+                    "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
+                    "type":"json_plugin_url",
+                    "title":"#{business.name}"
+                  }
+          end
         end
 
         msg[:messages][0][:attachment][:payload][:buttons] << {
