@@ -7,24 +7,23 @@ class PagesController < ApplicationController
   end
 
   def list_business
-    puts "The sessions ID is: #{session[:fb_user]}"
-    session[:fb_user] = params[:fb_user]
+    @fb_user = params[:fb_user]
     @business = User.where("lower(name) like ?", "%#{params[:business_name]}%".downcase).order(id: :asc)
     @table_number = params[:table_number]
 
     respond_to do |format|
       # Finalize any outstanding orders
-      if Order.where(:fb_user=>session[:fb_user], :paid=>false).count > 0
+      if Order.where(:fb_user=>@fb_user, :paid=>false).count > 0
         msg = {
           "messages": [
             {
               "attachment": {
                 "payload":{
                   "template_type": "button",
-                  "text": "Please pay an outstanding order - User: #{session[:fb_user]}:",
+                  "text": "Please pay an outstanding order - User: #{@fb_user}:",
                   "buttons": [
                     {
-                      "url":"#{ENV["APP_URL"]}/pages/find_total.json?fb_user=#{session[:fb_user]}",
+                      "url":"#{ENV["APP_URL"]}/pages/find_total.json?fb_user=#{@fb_user}",
                       "type":"json_plugin_url",
                       "title":"Finalize Order"
                     }
@@ -53,7 +52,7 @@ class PagesController < ApplicationController
 
         @business.all.each do |business|
           msg[:messages][0][:attachment][:payload][:buttons] << {
-                  "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{session[:fb_user]}&business_id=#{business.id}&table_number=#{@table_number}",
+                  "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
                   "type":"json_plugin_url",
                   "title":"#{business.name}"
                 }
@@ -72,6 +71,7 @@ class PagesController < ApplicationController
   end
 
   def create_order
+    @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     @order = Order.new :user_id => @business_id, :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => User.find(@business_id).name
     msg =
@@ -84,7 +84,7 @@ class PagesController < ApplicationController
               "text": "Welcome to #{@order.business_name}!",
               "buttons": [
                 {
-                  "url":"#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{session[:fb_user]}&business_id=#{@business_id}",
+                  "url":"#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
                   "type":"json_plugin_url",
                   "title":"Continue"
                 }
@@ -107,6 +107,7 @@ class PagesController < ApplicationController
   end
 
   def main_menu
+    @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     respond_to do |format|
       msg = {
@@ -118,12 +119,12 @@ class PagesController < ApplicationController
                 "text": "Please choose from the following options:",
                 "buttons": [
                   {
-                    "url": "#{ENV["APP_URL"]}/pages/list_categories.json?fb_user=#{session[:fb_user]}&business_id=#{@business_id}",
+                    "url": "#{ENV["APP_URL"]}/pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
                     "type":"json_plugin_url",
                     "title":"Order"
                   },
                   {
-                    "url": "#{ENV["APP_URL"]}/pages/find_total.json?fb_user=#{session[:fb_user]}&business_id=#{@business_id}",
+                    "url": "#{ENV["APP_URL"]}/pages/find_total.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
                     "type":"json_plugin_url",
                     "title":"Checkout"
                   }
@@ -139,6 +140,7 @@ class PagesController < ApplicationController
   end
 
   def list_categories
+    @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     respond_to do |format|
       msg = {
@@ -158,14 +160,14 @@ class PagesController < ApplicationController
 
       MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "#{ENV["APP_URL"]}/pages/list_foods.json?category_id=#{category.id}&fb_user=#{session[:fb_user]}&business_id=#{@business_id}",
+                "url": "#{ENV["APP_URL"]}/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
       end
 
       msg[:messages][0][:attachment][:payload][:buttons] << {
-              "url": "#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{session[:fb_user]}&business_id=#{@business_id}",
+              "url": "#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
               "type":"json_plugin_url",
               "title":"Go Back"
             }
@@ -175,6 +177,7 @@ class PagesController < ApplicationController
   end
 
   def list_foods
+    @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     @category_id = params[:category_id]
     respond_to do |format|
@@ -200,12 +203,12 @@ class PagesController < ApplicationController
           "buttons":[
             {
               "type":"json_plugin_url",
-              "url":"#{ENV["APP_URL"]}/pages/add_item.json?item=#{URI.encode(item.name)}&fb_user=#{session[:fb_user]}&business_id=#{@business_id}",
+              "url":"#{ENV["APP_URL"]}/pages/add_item.json?item=#{URI.encode(item.name)}&fb_user=#{@fb_user}&business_id=#{@business_id}",
               "title":"Order Item"
             },
             {
               "type":"json_plugin_url",
-              "url":"#{ENV["APP_URL"]}/pages/list_categories.json?fb_user=#{session[:fb_user]}&business_id=#{@business_id}",
+              "url":"#{ENV["APP_URL"]}/pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
               "title":"Go Back"
             }
           ]
@@ -217,9 +220,10 @@ class PagesController < ApplicationController
   end
 
   def add_item
+    @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     @item = params[:item]
-    @order = Order.where(:fb_user=>session[:fb_user], :paid=>false).first
+    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
 
     @order_list = @order.order_list
     @order_list << @item
@@ -244,14 +248,14 @@ class PagesController < ApplicationController
 
       MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
         msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "#{ENV["APP_URL"]}/pages/list_foods.json?category_id=#{category.id}&fb_user=#{session[:fb_user]}&business_id=#{@business_id}",
+                "url": "#{ENV["APP_URL"]}/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
                 "type":"json_plugin_url",
                 "title":"#{category.name}"
               }
       end
 
       msg[:messages][0][:attachment][:payload][:buttons] << {
-              "url": "#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{session[:fb_user]}&business_id=#{@business_id}",
+              "url": "#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
               "type":"json_plugin_url",
               "title":"Go Back"
             }
@@ -261,8 +265,9 @@ class PagesController < ApplicationController
   end
 
   def find_total
+    @fb_user = params[:fb_user]
     @business_id = params[:business_id]
-    @order = Order.where(:fb_user=>session[:fb_user], :paid=>false).first
+    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
     @sum = 0
     @order_list = @order.order_list
 
@@ -276,7 +281,7 @@ class PagesController < ApplicationController
     respond_to do |format|
       msg = {
       "messages": [
-        # {"text": "Your FB id is #{session[:fb_user]}"},
+        # {"text": "Your FB id is #{@fb_user}"},
         {"text": "Your table number is #{@order.table_number}"},
         {"text": "You ordered the following:"}
         ]
@@ -292,7 +297,7 @@ class PagesController < ApplicationController
             "text": "The total for your order is $#{@sum}",
             "buttons": [
               {
-                "url": "#{ENV["APP_URL"]}/pages/make_payment.json?fb_user=#{session[:fb_user]}",
+                "url": "#{ENV["APP_URL"]}/pages/make_payment.json?fb_user=#{@fb_user}",
                 "type":"json_plugin_url",
                 "title":"Make Payment"
               }
@@ -307,13 +312,14 @@ class PagesController < ApplicationController
   end
 
   def make_payment
-    @order = Order.where(:fb_user=>session[:fb_user], :paid=>false).first
+    @fb_user = params[:fb_user]
+    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
     @order.update_attribute("paid", true)
 
     respond_to do |format|
       msg = {
       "messages": [
-        # {"text": "Your FB id is #{session[:fb_user]}"},
+        # {"text": "Your FB id is #{@fb_user}"},
         {"text": "Thank you for your payment! Please visit #{@order.business_name} again."}
         ]
       }
