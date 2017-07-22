@@ -13,7 +13,8 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       # Finalize any outstanding orders
-      if Order.where(:fb_user=>@fb_user, :paid=>false).count > 0
+      # if Order.where(:fb_user=>@fb_user, :paid=>false).count > 0
+      if Order.check_outstanding(@fb_user)
         msg = {
           "messages": [
             {

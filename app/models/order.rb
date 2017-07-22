@@ -1,6 +1,10 @@
 class Order < ApplicationRecord
   belongs_to :user
 
+  def self.check_outstanding(fb_user)
+    Order.where(:fb_user=>fb_user, :paid=>false).count > 0
+  end
+
   def append_item(result)
     if result == nil
     else
