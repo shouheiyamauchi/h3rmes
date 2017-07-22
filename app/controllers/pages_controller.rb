@@ -72,7 +72,6 @@ class PagesController < ApplicationController
   end
 
   def create_order
-    session[:fb_user] = params[:fb_user]
     @business_id = params[:business_id]
     @order = Order.new :user_id => @business_id, :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => User.find(@business_id).name
     msg =
@@ -108,7 +107,6 @@ class PagesController < ApplicationController
   end
 
   def main_menu
-    session[:fb_user] = params[:fb_user]
     @business_id = params[:business_id]
     respond_to do |format|
       msg = {
@@ -141,7 +139,6 @@ class PagesController < ApplicationController
   end
 
   def list_categories
-    session[:fb_user] = params[:fb_user]
     @business_id = params[:business_id]
     respond_to do |format|
       msg = {
@@ -178,7 +175,6 @@ class PagesController < ApplicationController
   end
 
   def list_foods
-    session[:fb_user] = params[:fb_user]
     @business_id = params[:business_id]
     @category_id = params[:category_id]
     respond_to do |format|
@@ -221,7 +217,6 @@ class PagesController < ApplicationController
   end
 
   def add_item
-    session[:fb_user] = params[:fb_user]
     @business_id = params[:business_id]
     @item = params[:item]
     @order = Order.where(:fb_user=>session[:fb_user], :paid=>false).first
@@ -266,7 +261,6 @@ class PagesController < ApplicationController
   end
 
   def find_total
-    session[:fb_user] = params[:fb_user]
     @business_id = params[:business_id]
     @order = Order.where(:fb_user=>session[:fb_user], :paid=>false).first
     @sum = 0
@@ -313,7 +307,6 @@ class PagesController < ApplicationController
   end
 
   def make_payment
-    session[:fb_user] = params[:fb_user]
     @order = Order.where(:fb_user=>session[:fb_user], :paid=>false).first
     @order.update_attribute("paid", true)
 
