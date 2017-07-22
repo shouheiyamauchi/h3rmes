@@ -35,15 +35,57 @@ class PagesController < ApplicationController
           ]
         }
       else
+        # msg = {
+        #   "messages": [
+        #     {
+        #       "attachment": {
+        #         "type": "template",
+        #         "payload": {
+        #           "template_type": "button",
+        #           "text": "Please choose your restaurant:",
+        #           "buttons": []
+        #         }
+        #       }
+        #     }
+        #   ]
+        # }
+        #
+        # @business.all.each do |business|
+        #   msg[:messages][0][:attachment][:payload][:buttons] << {
+        #           "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
+        #           "type":"json_plugin_url",
+        #           "title":"#{business.name}"
+        #         }
+        # end
+        #
+        # msg[:messages][0][:attachment][:payload][:buttons] << {
+        #         "url":"#{ENV["APP_URL"]}/pages/check_in_block",
+        #         "type":"json_plugin_url",
+        #         "title":"Go Back"
+        #       }
+
         msg = {
           "messages": [
             {
               "attachment": {
                 "type": "template",
                 "payload": {
-                  "template_type": "button",
-                  "text": "Please choose your restaurant:",
-                  "buttons": []
+                  "template_type": "list",
+                  "top_element_style": "large",
+                  "elements": [
+                    {
+                      "title": "Classic White T-Shirt",
+                      "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+                      "subtitle": "Soft white cotton t-shirt is back in style",
+                      "buttons": [
+                        {
+                          "type": "web_url",
+                          "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
+                          "title": "Buy Item"
+                        }
+                      ]
+                    }
+                  ]
                 }
               }
             }
@@ -51,19 +93,19 @@ class PagesController < ApplicationController
         }
 
         @business.all.each do |business|
-          msg[:messages][0][:attachment][:payload][:buttons] << {
-                  "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
-                  "type":"json_plugin_url",
-                  "title":"#{business.name}"
+          msg[:messages][0][:attachment][:payload][:elements] << {
+                  "title": "#{business.name}",
+                  "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+                  "subtitle": "Subtitle",
+                  "buttons": [
+                    {
+                      "type": "json_plugin_url",
+                      "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
+                      "title": "Check in"
+                    }
+                  ]
                 }
         end
-
-        msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url":"#{ENV["APP_URL"]}/pages/check_in_block",
-                "type":"json_plugin_url",
-                "title":"Go Back"
-              }
-
 
       end
       format.json  { render :json => msg } # don't do msg.to_json
