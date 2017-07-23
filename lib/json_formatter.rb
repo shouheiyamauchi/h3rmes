@@ -42,21 +42,17 @@ class JsonFormatter
 
   def self.generate_sliding_list_json(list_data)
     sliding_list = {
-     "messages": [
-        {
-          "attachment":{
-            "type":"template",
-            "payload":{
-              "template_type":"generic",
-              "elements":[]
-            }
-          }
+      "attachment":{
+        "type":"template",
+        "payload":{
+          "template_type":"generic",
+          "elements":[]
         }
-      ]
+      }
     }
 
     list_data.each do |item|
-      sliding_list[:messages][0][:attachment][:payload][:elements] << {
+      sliding_list[:attachment][:payload][:elements] << {
         "title": item[:title],
         "image_url": item[:image_url],
         "subtitle": item[:subtitle],

@@ -12,30 +12,9 @@ class PagesController < ApplicationController
     respond_to do |format|
       # Finalize any outstanding orders
       if Order.check_outstanding(@fb_user)
-        # msg = {
-        #   "messages": [
-        #     {
-        #       "attachment": {
-        #         "payload":{
-        #           "template_type": "button",
-        #           "text": "Please pay an outstanding order - User: #{@fb_user}:",
-        #           "buttons": [
-        #             {
-        #               "url":"#{ENV["APP_URL"]}/pages/find_total.json?fb_user=#{@fb_user}",
-        #               "type":"json_plugin_url",
-        #               "title":"Finalize Order"
-        #             }
-        #           ]
-        #         },
-        #         "type": "template"
-        #       }
-        #     }
-        #   ]
-        # }
-
         list_data = {
-            text: "Please pay an outstanding order - User: #{@fb_user}:",
-            buttons: [
+          text: "Please pay an outstanding order - User: #{@fb_user}:",
+          buttons: [
             {
               "button_title": "Finalize Order",
               "url_data": {
@@ -48,7 +27,7 @@ class PagesController < ApplicationController
 
         msg = JsonFormatter.generate_simple_list(list_data)
       else
-        msg = JsonFormatter.display_business_list(@fb_user)
+        msg = { messages: [JsonFormatter.display_business_list(@fb_user), JsonFormatter.display_business_list(@fb_user)] }
       end
       format.json  { render :json => msg } # don't do msg.to_json
     end
