@@ -6,10 +6,9 @@ class PagesController < ApplicationController
   end
 
   def list_business
-    puts ::Api.new.message
+    puts Api.message
 
     @fb_user = params[:fb_user]
-    @table_number = params[:table_number]
 
     respond_to do |format|
       # Finalize any outstanding orders
@@ -35,35 +34,7 @@ class PagesController < ApplicationController
           ]
         }
       else
-        msg = {
-         "messages": [
-            {
-              "attachment":{
-                "type":"template",
-                "payload":{
-                  "template_type":"generic",
-                  "elements":[]
-                }
-              }
-            }
-          ]
-        }
-
-        User.all.each do |business|
-          msg[:messages][0][:attachment][:payload][:elements] << {
-            "title":"#{business.name}",
-            "image_url":"",
-            "subtitle":"",
-            "buttons":[
-              {
-                "type": "json_plugin_url",
-                "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
-                "title": "Check in"
-              }
-            ]
-          }
-        end
-
+        msg = Api.display_business_list
       end
       format.json  { render :json => msg } # don't do msg.to_json
     end
@@ -72,7 +43,7 @@ class PagesController < ApplicationController
   def create_order
     @fb_user = params[:fb_user]
     @business_id = params[:business_id]
-    @order = Order.new :user_id => @business_id, :table_number => params[:table_number], :fb_user => params[:fb_user], :business_name => User.find(@business_id).name
+    @order = Order.new :user_id => @business_id, :fb_user => params[:fb_user], :business_name => User.find(@business_id).name
     msg =
     {
       "messages": [
@@ -281,7 +252,6 @@ class PagesController < ApplicationController
       msg = {
       "messages": [
         # {"text": "Your FB id is #{@fb_user}"},
-        {"text": "Your table number is #{@order.table_number}"},
         {"text": "You ordered the following:"}
         ]
       }
