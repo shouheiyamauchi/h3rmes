@@ -1,6 +1,6 @@
 class Api
 
-  def self.message
+  def message
     "Check if this works"
   end
 
