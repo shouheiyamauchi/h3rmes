@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
+  before_filter :set_fb_user
   # require statement for heroku deployment
   require_relative "../../lib/json_formatter.rb"
 
@@ -7,7 +8,7 @@ class PagesController < ApplicationController
   end
 
   def list_business
-    @fb_user = params[:fb_user]
+    # @fb_user = params[:fb_user]
 
     respond_to do |format|
       # Finalize any outstanding orders
@@ -33,14 +34,14 @@ class PagesController < ApplicationController
           ]
         }
       else
-        msg = JsonFormatter.display_business_list(params[:fb_user])
+        msg = JsonFormatter.display_business_list(@fb_user)
       end
       format.json  { render :json => msg } # don't do msg.to_json
     end
   end
 
   def create_order
-    @fb_user = params[:fb_user]
+    # @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     @order = Order.new :user_id => @business_id, :fb_user => params[:fb_user], :business_name => User.find(@business_id).name
     msg =
@@ -76,7 +77,7 @@ class PagesController < ApplicationController
   end
 
   def main_menu
-    @fb_user = params[:fb_user]
+    # @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     respond_to do |format|
       msg = {
@@ -109,44 +110,46 @@ class PagesController < ApplicationController
   end
 
   def list_categories
-    @fb_user = params[:fb_user]
+    # @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     respond_to do |format|
-      msg = {
-        "messages": [
-          {
-            "attachment": {
-              "type": "template",
-              "payload": {
-                "template_type": "button",
-                "text": "Please choose your menu:",
-                "buttons": []
-              }
-            }
-          }
-        ]
-      }
+      # msg = {
+      #   "messages": [
+      #     {
+      #       "attachment": {
+      #         "type": "template",
+      #         "payload": {
+      #           "template_type": "button",
+      #           "text": "Please choose your menu:",
+      #           "buttons": []
+      #         }
+      #       }
+      #     }
+      #   ]
+      # }
+      #
+      # MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
+      #   msg[:messages][0][:attachment][:payload][:buttons] << {
+      #           "url": "#{ENV["APP_URL"]}/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
+      #           "type":"json_plugin_url",
+      #           "title":"#{category.name}"
+      #         }
+      # end
+      #
+      # msg[:messages][0][:attachment][:payload][:buttons] << {
+      #         "url": "#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
+      #         "type":"json_plugin_url",
+      #         "title":"Go Back"
+      #       }
 
-      MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
-        msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "#{ENV["APP_URL"]}/pages/list_foods.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
-                "type":"json_plugin_url",
-                "title":"#{category.name}"
-              }
-      end
-
-      msg[:messages][0][:attachment][:payload][:buttons] << {
-              "url": "#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
-              "type":"json_plugin_url",
-              "title":"Go Back"
-            }
+      msg = JsonFormatter.display_menu_categories(@fb_user)
 
       format.json  { render :json => msg } # don't do msg.to_json
     end
   end
 
   def list_foods
-    @fb_user = params[:fb_user]
+    # @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     @category_id = params[:category_id]
     respond_to do |format|
@@ -189,7 +192,7 @@ class PagesController < ApplicationController
   end
 
   def add_item
-    @fb_user = params[:fb_user]
+    # @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     @item = params[:item]
     @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
@@ -234,7 +237,7 @@ class PagesController < ApplicationController
   end
 
   def find_total
-    @fb_user = params[:fb_user]
+    # @fb_user = params[:fb_user]
     @business_id = params[:business_id]
     @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
     @sum = 0
@@ -280,7 +283,7 @@ class PagesController < ApplicationController
   end
 
   def make_payment
-    @fb_user = params[:fb_user]
+    # @fb_user = params[:fb_user]
     @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
     @order.update_attribute("paid", true)
 
@@ -294,5 +297,11 @@ class PagesController < ApplicationController
 
       format.json { render :json => msg }
     end
+  end
+
+  private
+
+  def set_fb_user
+    @fb_user = params[:fb_user]
   end
 end

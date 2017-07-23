@@ -1,37 +1,6 @@
 class JsonFormatter
 
   def self.display_business_list(fb_user)
-    # business_list = {
-    #  "messages": [
-    #     {
-    #       "attachment":{
-    #         "type":"template",
-    #         "payload":{
-    #           "template_type":"generic",
-    #           "elements":[]
-    #         }
-    #       }
-    #     }
-    #   ]
-    # }
-    #
-    # User.all.each do |business|
-    #   business_list[:messages][0][:attachment][:payload][:elements] << {
-    #     "title":"#{business.name}",
-    #     "image_url":"",
-    #     "subtitle":"",
-    #     "buttons":[
-    #       {
-    #         "type": "json_plugin_url",
-    #         "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
-    #         "title": "Check in"
-    #       }
-    #     ]
-    #   }
-    # end
-    #
-    # business_list
-
     business_list = []
 
     User.all.each do |business|
@@ -47,6 +16,24 @@ class JsonFormatter
     end
 
     generate_sliding_list_json(business_list)
+  end
+
+  def self.display_menu_categories(fb_user)
+    menu_categories = []
+
+    MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
+      menu_categories << {
+              "title":"#{category.name}",
+              "button_title": "Select category",
+              "url_data": {
+                "next_action": "list_foods",
+                "fb_user": fb_user,
+                "other_params": "&business_id=#{business.id}&category_id=#{category.id}"
+              }
+            }
+    end
+
+    generate_sliding_list_json(menu_categories)
   end
 
   private
