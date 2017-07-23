@@ -52,7 +52,7 @@ class PagesController < ApplicationController
           msg[:messages][0][:attachment][:payload][:elements] << {
             "title":"#{business.name}",
             "image_url":"",
-            "subtitle": Api.message,
+            "subtitle":"",
             "buttons":[
               {
                 "type": "json_plugin_url",
