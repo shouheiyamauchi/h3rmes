@@ -33,7 +33,33 @@ class JsonFormatter
             }
     end
 
-    generate_sliding_list_json(menu_categories)
+    sliding_list = generate_sliding_list_json(menu_categories)
+
+    add_go_back_button(sliding_list, fb_user, business_id)
+  end
+
+  # list is limited to 3 items, otherwise it won't display
+  def self.generate_simple_list(list_data)
+    simple_list = {
+      "attachment": {
+        "payload":{
+          "template_type": "button",
+          "text": list_data[:text],
+          "buttons": []
+        },
+        "type": "template"
+      }
+    }
+
+    list_data[:buttons].each do |item|
+      simple_list[:attachment][:payload][:buttons] << {
+        "type": "json_plugin_url",
+        "url": create_url(item[:url_data]),
+        "title": item[:button_title]
+      }
+    end
+
+    simple_list
   end
 
   def self.generate_sliding_list_json(list_data)
@@ -65,28 +91,22 @@ class JsonFormatter
     sliding_list
   end
 
-  # list is limited to 3 items, otherwise it won't display
-  def self.generate_simple_list(list_data)
-    simple_list = {
-      "attachment": {
-        "payload":{
-          "template_type": "button",
-          "text": list_data[:text],
-          "buttons": []
-        },
-        "type": "template"
-      }
+  def self.add_go_back_button(sliding_list, fb_user, business_id)
+    url_data = {
+      "next_action": "list_categories",
+      "fb_user": fb_user,
+      "other_params": "&business_id=#{business_id}"
     }
 
-    list_data[:buttons].each do |item|
-      simple_list[:attachment][:payload][:buttons] << {
-        "type": "json_plugin_url",
-        "url": create_url(item[:url_data]),
-        "title": item[:button_title]
+    sliding_list[:attachment][:payload][:elements].each do |item|
+      item[:buttons] << {
+        type: "json_plugin_url",
+        url: create_url(url_data),
+        title: "Go Back"
       }
     end
 
-    simple_list
+    sliding_list
   end
 
   private
