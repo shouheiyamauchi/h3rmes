@@ -71,7 +71,7 @@ class PagesController < ApplicationController
                 "type": "template",
                 "payload": {
                   "template_type": "list",
-                  "top_element_style": "large",
+                  "top_element_style": "compact",
                   "elements": [
                     {
                       "title": "Classic White T-Shirt",
