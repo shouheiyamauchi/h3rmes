@@ -95,7 +95,7 @@ class PagesController < ApplicationController
         @business.all.each do |business|
           msg[:messages][0][:attachment][:payload][:elements] << {
                   "title": "#{business.name}",
-                  "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+                  # "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
                   "subtitle": "Subtitle",
                   "buttons": [
                     {
