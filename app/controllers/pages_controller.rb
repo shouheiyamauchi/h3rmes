@@ -103,8 +103,8 @@ class PagesController < ApplicationController
   def list_categories
     @business_id = params[:business_id]
     respond_to do |format|
-      msg = JsonFormatter.display_menu_categories(@fb_user, @business_id)
-      format.json  { render :json => msg } # don't do msg.to_json
+      @msg[:messages] << JsonFormatter.display_menu_categories(@fb_user, @business_id)
+      format.json  { render :json => @msg } # don't do msg.to_json
     end
   end
 
