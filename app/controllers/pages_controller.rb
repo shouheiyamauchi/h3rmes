@@ -7,7 +7,7 @@ class PagesController < ApplicationController
   end
 
   def list_business
-    puts ::JsonFormatter.message
+    puts JsonFormatter.message
 
     @fb_user = params[:fb_user]
 
