@@ -81,7 +81,7 @@ class JsonFormatter
           "attachment": {
             "payload":{
               "template_type": "button",
-              "text": data[:text],
+              "text": list_data[:text],
               "buttons": []
             },
             "type": "template"
