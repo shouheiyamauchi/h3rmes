@@ -1,14 +1,12 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
   # require statement for heroku deployment
-  require "/app/lib/json_formatter.rb"
+  require_relative "../../lib/json_formatter.rb"
 
   def home
   end
 
   def list_business
-    puts JsonFormatter.message
-
     @fb_user = params[:fb_user]
 
     respond_to do |format|
