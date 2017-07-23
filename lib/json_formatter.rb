@@ -36,8 +36,6 @@ class JsonFormatter
     generate_sliding_list_json(menu_categories)
   end
 
-  private
-
   def self.create_url(params)
     "#{ENV["APP_URL"]}/pages/#{params[:next_action]}.json?fb_user=#{params[:fb_user]}#{params[:other_params]}"
   end
@@ -73,6 +71,36 @@ class JsonFormatter
     end
 
     sliding_list
+  end
+
+  # list is limited to 3 items, otherwise it won't display
+  def self.generate_simple_list(data)
+puts data.inspect
+
+    simple_list = {
+      "messages": [
+        {
+          "attachment": {
+            "payload":{
+              "template_type": "button",
+              "text": "Please pay an outstanding order - User: #{@fb_user}:",
+              "buttons": []
+            },
+            "type": "template"
+          }
+        }
+      ]
+    }
+
+    data.each do |item|
+      simple_list[:messages][0][:attachment][:payload][:buttons] << {
+        "type": "json_plugin_url",
+        "url": create_url(item[:url_data]),
+        "title": item[:button_title]
+      }
+    end
+
+    simple_list
   end
 
 end
