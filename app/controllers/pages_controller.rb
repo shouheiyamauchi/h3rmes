@@ -96,8 +96,9 @@ class PagesController < ApplicationController
   def list_categories
     business_id = params[:business_id]
 
+    @msg[:messages] << JsonFormatter.generate_categories_list(@fb_user, business_id)
+
     respond_to do |format|
-      @msg[:messages] << JsonFormatter.generate_categories_list(@fb_user, business_id)
       format.json  { render :json => @msg } # don't do msg.to_json
     end
   end
@@ -116,44 +117,30 @@ class PagesController < ApplicationController
   def add_item
     @business_id = params[:business_id]
     @item = params[:item]
-    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
+    @order = Order.last_order
 
     @order_list = @order.order_list
     @order_list << @item
 
     @order.update_attribute("order_list", @order_list)
 
-    respond_to do |format|
-      msg = {
-        "messages": [
-          {
-            "attachment": {
-              "type": "template",
-              "payload": {
-                "template_type": "button",
-                "text": "You have ordered: #{@item} x 1",
-                "buttons": []
-              }
-            }
+    @msg[:messages] <<  {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "button",
+            "text": "You have ordered: #{@item} x 1",
+            "buttons": []
           }
-        ]
+        }
       }
 
-      MenuGroup.where(:user_id => @business_id).order(id: :asc).each do |category|
-        msg[:messages][0][:attachment][:payload][:buttons] << {
-                "url": "#{ENV["APP_URL"]}/pages/list_items.json?category_id=#{category.id}&fb_user=#{@fb_user}&business_id=#{@business_id}",
-                "type":"json_plugin_url",
-                "title":"#{category.name}"
-              }
-      end
+    @msg[:messages] << JsonFormatter.generate_categories_list(@fb_user, business_id)
 
-      msg[:messages][0][:attachment][:payload][:buttons] << {
-              "url": "#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
-              "type":"json_plugin_url",
-              "title":"Go Back"
-            }
+    respond_to do |format|
 
-      format.json  { render :json => msg } # don't do msg.to_json
+
+      format.json  { render :json => @msg } # don't do msg.to_json
     end
   end
 
