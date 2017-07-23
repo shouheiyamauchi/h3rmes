@@ -1,8 +1,7 @@
 class PagesController < ApplicationController
+  require_relative "../../lib/json_formatter.rb"
   skip_before_filter :authenticate_user!
   before_filter :set_fb_user, :set_msg_hash
-  # require statement for heroku deployment
-  require_relative "../../lib/json_formatter.rb"
 
   def home
   end
@@ -13,7 +12,7 @@ class PagesController < ApplicationController
       # Finalize any outstanding orders
       if Order.check_outstanding(@fb_user)
         list_data = {
-          text: "Please pay an outstanding order - User: #{@fb_user}:",
+          text: "Please pay an outstanding order from #{Order.last_order(@fb_user).business_name}:",
           buttons: [
             {
               "button_title": "Finalize Order",
@@ -35,7 +34,7 @@ class PagesController < ApplicationController
 
   def create_order
     @business_id = params[:business_id]
-    @order = Order.new :user_id => @business_id, :fb_user => params[:fb_user], :business_name => User.find(@business_id).name
+    @order = Order.new :user_id => @business_id, :fb_user => @fb_user, :business_name => User.find(@business_id).name
     msg =
     {
       "messages": [
@@ -102,6 +101,7 @@ class PagesController < ApplicationController
 
   def list_categories
     @business_id = params[:business_id]
+
     respond_to do |format|
       @msg[:messages] << JsonFormatter.display_menu_categories(@fb_user, @business_id)
       format.json  { render :json => @msg } # don't do msg.to_json

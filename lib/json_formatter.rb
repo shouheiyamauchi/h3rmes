@@ -36,10 +36,6 @@ class JsonFormatter
     generate_sliding_list_json(menu_categories)
   end
 
-  def self.create_url(params)
-    "#{ENV["APP_URL"]}/pages/#{params[:next_action]}.json?fb_user=#{params[:fb_user]}#{params[:other_params]}"
-  end
-
   def self.generate_sliding_list_json(list_data)
     sliding_list = {
       "attachment": {
@@ -91,6 +87,12 @@ class JsonFormatter
     end
 
     simple_list
+  end
+
+  private
+
+  def self.create_url(params)
+    "#{ENV["APP_URL"]}/pages/#{params[:next_action]}.json?fb_user=#{params[:fb_user]}#{params[:other_params]}"
   end
 
 end

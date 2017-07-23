@@ -5,6 +5,10 @@ class Order < ApplicationRecord
     Order.where(:fb_user=>fb_user, :paid=>false).count > 0
   end
 
+  def self.last_order(fb_user)
+    Order.where(:fb_user=>fb_user, :paid=>false)
+  end
+
   def append_item(result)
     if result == nil
     else
