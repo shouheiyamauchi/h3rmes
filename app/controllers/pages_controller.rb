@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
   # h3rmes.herokuapp.com
-  require "/lib/api.rb" 
+  require_relative "../../lib/api.rb" 
 
   def home
   end
