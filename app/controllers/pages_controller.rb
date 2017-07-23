@@ -7,58 +7,37 @@ class PagesController < ApplicationController
   end
 
   def list_business
+    # Finalize any outstanding orders
+    if Order.check_outstanding(@fb_user)
+      list_data = {
+        text: "Please pay an outstanding order from #{Order.last_order(@fb_user).business_name}:",
+        buttons: [
+          {
+            "button_title": "Finalize Order",
+            "url_data": {
+              next_action: "find_total",
+              fb_user: @fb_user
+            }
+          }
+        ]
+      }
+
+      @msg[:messages] << JsonFormatter.generate_simple_list(list_data)
+    else
+      @msg[:messages] << JsonFormatter.display_business_list(@fb_user)
+    end
 
     respond_to do |format|
-      # Finalize any outstanding orders
-      if Order.check_outstanding(@fb_user)
-        list_data = {
-          text: "Please pay an outstanding order from #{Order.last_order(@fb_user).business_name}:",
-          buttons: [
-            {
-              "button_title": "Finalize Order",
-              "url_data": {
-                next_action: "find_total",
-                fb_user: @fb_user
-              }
-            }
-          ]
-        }
-
-        @msg[:messages] << JsonFormatter.generate_simple_list(list_data)
-      else
-        @msg[:messages] << JsonFormatter.display_business_list(@fb_user)
-      end
       format.json  { render :json => @msg } # don't do msg.to_json
     end
   end
 
   def create_order
-    @business_id = params[:business_id]
-    @order = Order.new :user_id => @business_id, :fb_user => @fb_user, :business_name => User.find(@business_id).name
-    # msg =
-    # {
-    #   "messages": [
-    #     {
-    #       "attachment": {
-    #         "payload":{
-    #           "template_type": "button",
-    #           "text": "Welcome to #{@order.business_name}!",
-    #           "buttons": [
-    #             {
-    #               "url":"#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
-    #               "type":"json_plugin_url",
-    #               "title":"Continue"
-    #             }
-    #           ]
-    #         },
-    #         "type": "template"
-    #       }
-    #     }
-    #   ]
-    # }
+    business_id = params[:business_id]
+    order = Order.new :user_id => business_id, :fb_user => @fb_user, :business_name => User.find(business_id).name
 
     list_data = {
-      text: "Welcome to #{@order.business_name}!",
+      text: "Welcome to #{order.business_name}!",
       buttons: [
         {
           "button_title": "Continue",
@@ -74,45 +53,43 @@ class PagesController < ApplicationController
     @msg[:messages] << JsonFormatter.generate_simple_list(list_data)
 
     respond_to do |format|
-      if @order.save
-        format.html { redirect_to @order, notice: 'Order was successfully created.' }
+      if order.save
         format.json { render :json => @msg }
       else
-        format.html { render :new }
-        format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
+        # insert error handling
       end
     end
   end
 
   def main_menu
-    @business_id = params[:business_id]
-    respond_to do |format|
-      msg = {
-        "messages": [
-          {
-            "attachment": {
-              "payload":{
-                "template_type": "button",
-                "text": "Please choose from the following options:",
-                "buttons": [
-                  {
-                    "url": "#{ENV["APP_URL"]}/pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
-                    "type":"json_plugin_url",
-                    "title":"Order"
-                  },
-                  {
-                    "url": "#{ENV["APP_URL"]}/pages/find_total.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
-                    "type":"json_plugin_url",
-                    "title":"Checkout"
-                  }
-                ]
-              },
-              "type": "template"
-            }
+    business_id = params[:business_id]
+
+    list_data = {
+      text: "Please choose from the following options:",
+      buttons: [
+        {
+          "button_title": "Order",
+          "url_data": {
+            next_action: "list_categories",
+            fb_user: @fb_user,
+            other_params: "&business_id=#{business_id}"
           }
-        ]
-      }
-      format.json { render :json => msg }
+        },
+        {
+          "button_title": "Checkout",
+          "url_data": {
+            next_action: "find_total",
+            fb_user: @fb_user,
+            other_params: "&business_id=#{business_id}"
+          }
+        }
+      ]
+    }
+
+    @msg[:messages] << JsonFormatter.generate_simple_list(list_data)
+
+    respond_to do |format|
+      format.json { render :json => @msg }
     end
   end
 
