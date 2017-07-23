@@ -7,7 +7,7 @@ class PagesController < ApplicationController
   end
 
   def list_business
-    puts Api.new.message
+    puts ::Api.new.message
 
     @fb_user = params[:fb_user]
     @table_number = params[:table_number]
