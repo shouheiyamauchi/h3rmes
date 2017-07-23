@@ -33,15 +33,18 @@ class PagesController < ApplicationController
         #   ]
         # }
 
-        list_data = [
-          {
-            "button_title": "Finalize Order",
-            "url_data": {
-              next_action: "find_total",
-              fb_user: @fb_user
+        list_data = {
+            text: "Please pay an outstanding order - User: #{@fb_user}:",
+            buttons: [
+            {
+              "button_title": "Finalize Order",
+              "url_data": {
+                next_action: "find_total",
+                fb_user: @fb_user
+              }
             }
-          }
-        ]
+          ]
+        }
 
         msg = JsonFormatter.generate_simple_list(list_data)
       else
