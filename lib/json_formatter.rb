@@ -1,4 +1,4 @@
-class Api
+class JsonFormatter
 
   def self.message
     "Check if this works"

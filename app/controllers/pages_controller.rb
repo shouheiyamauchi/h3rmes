@@ -1,13 +1,13 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
   # h3rmes.herokuapp.com
-  require "/app/lib/apii.rb"
+  require "/app/lib/json_formatter.rb"
 
   def home
   end
 
   def list_business
-    puts ::Api.message
+    puts ::JsonFormatter.message
 
     @fb_user = params[:fb_user]
 
@@ -35,7 +35,7 @@ class PagesController < ApplicationController
           ]
         }
       else
-        msg = ::Api.display_business_list
+        msg = ::JsonFormatter.display_business_list
       end
       format.json  { render :json => msg } # don't do msg.to_json
     end
