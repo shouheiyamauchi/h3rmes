@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
-  before_filter :set_fb_user
+  before_filter :set_fb_user, :set_msg_hash
   # require statement for heroku deployment
   require_relative "../../lib/json_formatter.rb"
 
@@ -25,11 +25,11 @@ class PagesController < ApplicationController
           ]
         }
 
-        msg = { messages: [JsonFormatter.generate_simple_list(list_data)] }
+        @msg[:messages] << JsonFormatter.generate_simple_list(list_data)
       else
-        msg = { messages: [JsonFormatter.display_business_list(@fb_user)] }
+        @msg[:messages] << JsonFormatter.display_business_list(@fb_user)
       end
-      format.json  { render :json => msg } # don't do msg.to_json
+      format.json  { render :json => @msg } # don't do msg.to_json
     end
   end
 
@@ -260,4 +260,11 @@ class PagesController < ApplicationController
   def set_fb_user
     @fb_user = params[:fb_user]
   end
+
+  def set_msg_hash
+    @msg = {
+      messages: []
+    }
+  end
+
 end
