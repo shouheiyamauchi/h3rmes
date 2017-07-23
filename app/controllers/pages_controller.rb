@@ -97,7 +97,7 @@ class PagesController < ApplicationController
     @business_id = params[:business_id]
 
     respond_to do |format|
-      @msg[:messages] << JsonFormatter.display_menu_categories(@fb_user, @business_id)
+      @msg[:messages] << JsonFormatter.generate_categories_list(@fb_user, @business_id)
       format.json  { render :json => @msg } # don't do msg.to_json
     end
   end

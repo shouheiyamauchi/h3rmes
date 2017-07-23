@@ -18,7 +18,7 @@ class JsonFormatter
     generate_sliding_list_json(business_list)
   end
 
-  def self.display_menu_categories(fb_user, business_id)
+  def self.generate_categories_list(fb_user, business_id)
     menu_categories = []
 
     MenuGroup.where(:user_id => business_id).order(id: :asc).each do |category|
