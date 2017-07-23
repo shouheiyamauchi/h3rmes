@@ -33,8 +33,8 @@ class PagesController < ApplicationController
   end
 
   def create_order
-    @business_id = params[:business_id]
-    @order = Order.new :user_id => @business_id, :fb_user => @fb_user, :business_name => User.find(@business_id).name
+    business_id = params[:business_id]
+    order = Order.new :user_id => business_id, :fb_user => @fb_user, :business_name => User.find(business_id).name
     # msg =
     # {
     #   "messages": [
@@ -58,7 +58,7 @@ class PagesController < ApplicationController
     # }
 
     list_data = {
-      text: "Welcome to #{@order.business_name}!",
+      text: "Welcome to #{order.business_name}!",
       buttons: [
         {
           "button_title": "Continue",
@@ -74,7 +74,7 @@ class PagesController < ApplicationController
     @msg[:messages] << JsonFormatter.generate_simple_list(list_data)
 
     respond_to do |format|
-      if @order.save
+      if order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :json => @msg }
       else
