@@ -26,7 +26,7 @@ class JsonFormatter
               "title":"#{category.name}",
               "button_title": "Select Category",
               "url_data": {
-                "next_action": "list_foods",
+                "next_action": "list_items",
                 "fb_user": fb_user,
                 "other_params": "&business_id=#{business_id}&category_id=#{category.id}"
               }

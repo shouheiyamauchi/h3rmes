@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   post 'pages/list_business'
   post 'pages/create_order'
   post 'pages/main_menu'
-  post 'pages/list_foods'
+  post 'pages/list_items'
   post 'pages/list_categories'
   post 'pages/add_item'
   post 'pages/find_total'
