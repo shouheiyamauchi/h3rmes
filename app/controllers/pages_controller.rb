@@ -8,7 +8,6 @@ class PagesController < ApplicationController
 
   def list_business
     @fb_user = params[:fb_user]
-    @business = User.where("lower(name) like ?", "%#{params[:business_name]}%".downcase).order(id: :asc)
     @table_number = params[:table_number]
 
     respond_to do |format|
@@ -53,7 +52,7 @@ class PagesController < ApplicationController
           msg[:messages][0][:attachment][:payload][:elements] << {
             "title":"#{business.name}",
             "image_url":"",
-            "subtitle":"",
+            "subtitle": Api.message,
             "buttons":[
               {
                 "type": "json_plugin_url",
