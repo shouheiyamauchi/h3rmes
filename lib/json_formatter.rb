@@ -38,6 +38,28 @@ class JsonFormatter
     add_go_back_button(sliding_list, "main_menu", fb_user, business_id)
   end
 
+  def self.generate_items_list(fb_user, business_id, category_id)
+    menu_items = []
+
+    MenuItem.where(:menu_group_id => category_id).each do |item|
+      menu_items << {
+        "title":"#{item.name}...$#{item.price}",
+        "image_url":"#{item.image.url}",
+        "subtitle":"#{item.description}",
+        "button_title": "Order Item",
+        "url_data": {
+          "next_action": "add_item",
+          "fb_user": fb_user,
+          "other_params": "&business_id=#{business_id}&item=#{URI.encode(item.name)}"
+        }
+      }
+    end
+
+    sliding_list = generate_sliding_list(menu_items)
+
+    add_go_back_button(sliding_list, "list_categories", fb_user, business_id)
+  end
+
   # list is limited to 3 items, otherwise it won't display
   def self.generate_simple_list(list_data)
     simple_list = {

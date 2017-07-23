@@ -103,44 +103,47 @@ class PagesController < ApplicationController
   end
 
   def list_foods
-    @business_id = params[:business_id]
-    @category_id = params[:category_id]
+    business_id = params[:business_id]
+    category_id = params[:category_id]
+
+    @msg[:messages] << JsonFormatter.generate_items_list(@fb_user, business_id, category_id)
+
     respond_to do |format|
-      msg = {
-       "messages": [
-          {
-            "attachment":{
-              "type":"template",
-              "payload":{
-                "template_type":"generic",
-                "elements":[]
-              }
-            }
-          }
-        ]
-      }
+      # msg = {
+      #  "messages": [
+      #     {
+      #       "attachment":{
+      #         "type":"template",
+      #         "payload":{
+      #           "template_type":"generic",
+      #           "elements":[]
+      #         }
+      #       }
+      #     }
+      #   ]
+      # }
+      #
+      # MenuItem.where(:menu_group_id=>@category_id).each do |item|
+      #   msg[:messages][0][:attachment][:payload][:elements] << {
+      #     "title":"#{item.name}...$#{item.price}",
+      #     "image_url":"#{item.image.url}",
+      #     "subtitle":"#{item.description}",
+      #     "buttons":[
+      #       {
+      #         "type":"json_plugin_url",
+      #         "url":"#{ENV["APP_URL"]}/pages/add_item.json?item=#{URI.encode(item.name)}&fb_user=#{@fb_user}&business_id=#{@business_id}",
+      #         "title":"Order Item"
+      #       },
+      #       {
+      #         "type":"json_plugin_url",
+      #         "url":"#{ENV["APP_URL"]}/pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
+      #         "title":"Go Back"
+      #       }
+      #     ]
+      #   }
+      # end
 
-      MenuItem.where(:menu_group_id=>@category_id).each do |item|
-        msg[:messages][0][:attachment][:payload][:elements] << {
-          "title":"#{item.name}...$#{item.price}",
-          "image_url":"#{item.image.url}",
-          "subtitle":"#{item.description}",
-          "buttons":[
-            {
-              "type":"json_plugin_url",
-              "url":"#{ENV["APP_URL"]}/pages/add_item.json?item=#{URI.encode(item.name)}&fb_user=#{@fb_user}&business_id=#{@business_id}",
-              "title":"Order Item"
-            },
-            {
-              "type":"json_plugin_url",
-              "url":"#{ENV["APP_URL"]}/pages/list_categories.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
-              "title":"Go Back"
-            }
-          ]
-        }
-      end
-
-      format.json  { render :json => msg } # don't do msg.to_json
+      format.json  { render :json => @msg } # don't do msg.to_json
     end
   end
 
