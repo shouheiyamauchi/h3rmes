@@ -92,7 +92,7 @@ class PagesController < ApplicationController
           ]
         }
 
-        8.times do
+        5.times do
           @business.all.each do |business|
             msg[:messages][0][:attachment][:payload][:elements] << {
                     "title": "#{business.name}",
