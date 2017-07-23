@@ -64,50 +64,78 @@ class PagesController < ApplicationController
         #         "title":"Go Back"
         #       }
 
+
+        # msg = {
+        #   "messages": [
+        #     {
+        #       "attachment": {
+        #         "type": "template",
+        #         "payload": {
+        #           "template_type": "list",
+        #           "top_element_style": "compact",
+        #           "elements": [
+        #             {
+        #               "title": "Classic White T-Shirt",
+        #               "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+        #               "subtitle": "Soft white cotton t-shirt is back in style",
+        #               "buttons": [
+        #                 {
+        #                   "type": "web_url",
+        #                   "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
+        #                   "title": "Buy Item"
+        #                 }
+        #               ]
+        #             }
+        #           ]
+        #         }
+        #       }
+        #     }
+        #   ]
+        # }
+        #
+        # @business.all.each do |business|
+        #   msg[:messages][0][:attachment][:payload][:elements] << {
+        #           "title": "#{business.name}",
+        #           "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+        #           "subtitle": "Subtitle",
+        #           "buttons": [
+        #             {
+        #               "type": "json_plugin_url",
+        #               "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
+        #               "title": "Check in"
+        #             }
+        #           ]
+        #         }
+        # end
+
+
         msg = {
-          "messages": [
+         "messages": [
             {
-              "attachment": {
-                "type": "template",
-                "payload": {
-                  "template_type": "list",
-                  "top_element_style": "compact",
-                  "elements": [
-                    {
-                      "title": "Classic White T-Shirt",
-                      "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
-                      "subtitle": "Soft white cotton t-shirt is back in style",
-                      "buttons": [
-                        {
-                          "type": "web_url",
-                          "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
-                          "title": "Buy Item"
-                        }
-                      ]
-                    }
-                  ]
+              "attachment":{
+                "type":"template",
+                "payload":{
+                  "template_type":"generic",
+                  "elements":[]
                 }
               }
             }
           ]
         }
 
-        4.times do
-          @business.all.each do |business|
-            msg[:messages][0][:attachment][:payload][:elements] << {
-                    "title": "#{business.name}",
-                    "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
-                    "subtitle": "Subtitle",
-                    "buttons": [
-                      {
-                        "type": "json_plugin_url",
-                        "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
-                        "title": "Check in"
-                      }
-                    ]
-                  }
-          end
-        end
+        @business.all.each do |business|
+          msg[:messages][0][:attachment][:payload][:elements] << {
+            "title":"#{business.name}",
+            "image_url":"",
+            "subtitle":"",
+            "buttons":[
+              {
+                "type": "json_plugin_url",
+                "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
+                "title": "Check in"
+              }
+            ]
+          }
 
       end
       format.json  { render :json => msg } # don't do msg.to_json
