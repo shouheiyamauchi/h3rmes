@@ -6,7 +6,7 @@ class JsonFormatter
     User.all.each do |business|
       business_list << {
         "title": business.name,
-        "button_title": "Check in",
+        "button_title": "Check In",
         "url_data": {
           "next_action": "create_order",
           "fb_user": fb_user,
@@ -24,7 +24,7 @@ class JsonFormatter
     MenuGroup.where(:user_id => business_id).order(id: :asc).each do |category|
       menu_categories << {
               "title":"#{category.name}",
-              "button_title": "Select category",
+              "button_title": "Select Category",
               "url_data": {
                 "next_action": "list_foods",
                 "fb_user": fb_user,
