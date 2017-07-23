@@ -1,6 +1,5 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
-  require 'api'
   # h3rmes.herokuapp.com
 
   def home
