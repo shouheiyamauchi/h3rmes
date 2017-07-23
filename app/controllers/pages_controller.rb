@@ -142,7 +142,7 @@ class PagesController < ApplicationController
       #         "title":"Go Back"
       #       }
 
-      msg = JsonFormatter.display_menu_categories(@fb_user)
+      msg = JsonFormatter.display_menu_categories(@fb_user, @business_id)
 
       format.json  { render :json => msg } # don't do msg.to_json
     end
