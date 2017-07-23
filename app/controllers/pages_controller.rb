@@ -136,7 +136,7 @@ class PagesController < ApplicationController
               }
             ]
           }
-
+        end
       end
       format.json  { render :json => msg } # don't do msg.to_json
     end
