@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
   # h3rmes.herokuapp.com
-  require_relative "../../lib/api.rb" 
+  # require_relative "../../lib/api.rb"
 
   def home
   end
@@ -35,7 +35,7 @@ class PagesController < ApplicationController
           ]
         }
       else
-        msg = ::Api.display_business_list
+        # msg = ::Api.display_business_list
       end
       format.json  { render :json => msg } # don't do msg.to_json
     end
