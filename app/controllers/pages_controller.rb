@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user!
-  # h3rmes.herokuapp.com
+  # require statement for heroku deployment
   require "/app/lib/json_formatter.rb"
 
   def home
@@ -35,7 +35,7 @@ class PagesController < ApplicationController
           ]
         }
       else
-        msg = ::JsonFormatter.display_business_list
+        msg = JsonFormatter.display_business_list
       end
       format.json  { render :json => msg } # don't do msg.to_json
     end
