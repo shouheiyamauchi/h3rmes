@@ -28,7 +28,7 @@ class JsonFormatter
               "url_data": {
                 "next_action": "list_foods",
                 "fb_user": fb_user,
-                "other_params": "&business_id=#{business.id}&category_id=#{category.id}"
+                "other_params": "&business_id=#{business_id}&category_id=#{category.id}"
               }
             }
     end
