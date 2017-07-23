@@ -33,7 +33,7 @@ class PagesController < ApplicationController
           ]
         }
       else
-        msg = JsonFormatter.display_business_list
+        msg = JsonFormatter.display_business_list(params[:fb_user])
       end
       format.json  { render :json => msg } # don't do msg.to_json
     end

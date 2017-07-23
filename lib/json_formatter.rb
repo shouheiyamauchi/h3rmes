@@ -1,6 +1,6 @@
 class JsonFormatter
 
-  def self.display_business_list
+  def self.display_business_list(fb_user)
     # business_list = {
     #  "messages": [
     #     {
@@ -37,7 +37,12 @@ class JsonFormatter
     User.all.each do |business|
       business_list << {
         "title": business.name,
-        "button_title": "Check in"
+        "button_title": "Check in",
+        "url_data": {
+          "next_action": "create_order",
+          "fb_user": fb_user,
+          "other_params": "&business_id=#{business.id}"
+        }
       }
     end
 
@@ -45,6 +50,10 @@ class JsonFormatter
   end
 
   private
+
+  def self.create_url(params)
+    "#{ENV["APP_URL"]}/pages/#{params[:next_action]}.json?fb_user=#{params[:fb_user]}#{params[:other_params]}"
+  end
 
   def self.generate_sliding_list_json(data)
     sliding_list = {
@@ -69,7 +78,7 @@ class JsonFormatter
         "buttons":[
           {
             "type": "json_plugin_url",
-            "url": "#{ENV["APP_URL"]}/pages/create_order.json",
+            "url": create_url(item[:url_data]),
             "title": item[:button_title]
           }
         ]
