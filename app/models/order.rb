@@ -6,7 +6,7 @@ class Order < ApplicationRecord
   end
 
   def self.last_order(fb_user)
-    Order.where(:fb_user=>fb_user, :paid=>false)
+    Order.where(:fb_user=>fb_user, :paid=>false).last
   end
 
   def append_item(result)
