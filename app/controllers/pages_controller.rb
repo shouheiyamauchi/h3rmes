@@ -25,9 +25,9 @@ class PagesController < ApplicationController
           ]
         }
 
-        msg = JsonFormatter.generate_simple_list(list_data)
+        msg = { messages: [JsonFormatter.generate_simple_list(list_data)] }
       else
-        msg = { messages: [JsonFormatter.display_business_list(@fb_user), JsonFormatter.display_business_list(@fb_user)] }
+        msg = { messages: [JsonFormatter.display_business_list(@fb_user)] }
       end
       format.json  { render :json => msg } # don't do msg.to_json
     end

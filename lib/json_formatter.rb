@@ -42,11 +42,11 @@ class JsonFormatter
 
   def self.generate_sliding_list_json(list_data)
     sliding_list = {
-      "attachment":{
-        "type":"template",
-        "payload":{
-          "template_type":"generic",
-          "elements":[]
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": []
         }
       }
     }
@@ -72,22 +72,18 @@ class JsonFormatter
   # list is limited to 3 items, otherwise it won't display
   def self.generate_simple_list(list_data)
     simple_list = {
-      "messages": [
-        {
-          "attachment": {
-            "payload":{
-              "template_type": "button",
-              "text": list_data[:text],
-              "buttons": []
-            },
-            "type": "template"
-          }
-        }
-      ]
+      "attachment": {
+        "payload":{
+          "template_type": "button",
+          "text": list_data[:text],
+          "buttons": []
+        },
+        "type": "template"
+      }
     }
 
     list_data[:buttons].each do |item|
-      simple_list[:messages][0][:attachment][:payload][:buttons] << {
+      simple_list[:attachment][:payload][:buttons] << {
         "type": "json_plugin_url",
         "url": create_url(item[:url_data]),
         "title": item[:button_title]
