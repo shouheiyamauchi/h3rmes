@@ -35,31 +35,48 @@ class PagesController < ApplicationController
   def create_order
     @business_id = params[:business_id]
     @order = Order.new :user_id => @business_id, :fb_user => @fb_user, :business_name => User.find(@business_id).name
-    msg =
-    {
-      "messages": [
+    # msg =
+    # {
+    #   "messages": [
+    #     {
+    #       "attachment": {
+    #         "payload":{
+    #           "template_type": "button",
+    #           "text": "Welcome to #{@order.business_name}!",
+    #           "buttons": [
+    #             {
+    #               "url":"#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
+    #               "type":"json_plugin_url",
+    #               "title":"Continue"
+    #             }
+    #           ]
+    #         },
+    #         "type": "template"
+    #       }
+    #     }
+    #   ]
+    # }
+
+    list_data = {
+      text: "Welcome to #{@order.business_name}!",
+      buttons: [
         {
-          "attachment": {
-            "payload":{
-              "template_type": "button",
-              "text": "Welcome to #{@order.business_name}!",
-              "buttons": [
-                {
-                  "url":"#{ENV["APP_URL"]}/pages/main_menu.json?fb_user=#{@fb_user}&business_id=#{@business_id}",
-                  "type":"json_plugin_url",
-                  "title":"Continue"
-                }
-              ]
-            },
-            "type": "template"
+          "button_title": "Continue",
+          "url_data": {
+            next_action: "main_menu",
+            fb_user: @fb_user,
+            other_params: "&business_id=#{business_id}"
           }
         }
       ]
     }
+
+    @msg[:messages] << JsonFormatter.generate_simple_list(list_data)
+
     respond_to do |format|
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
-        format.json { render :json => msg }
+        format.json { render :json => @msg }
       else
         format.html { render :new }
         format.json { render json: @order.errors, status: :unprocessable_entity, response: request.body.read }
