@@ -15,7 +15,7 @@ class JsonFormatter
       }
     end
 
-    generate_sliding_list_json(business_list)
+    generate_sliding_list(business_list)
   end
 
   def self.generate_categories_list(fb_user, business_id)
@@ -33,7 +33,7 @@ class JsonFormatter
             }
     end
 
-    sliding_list = generate_sliding_list_json(menu_categories)
+    sliding_list = generate_sliding_list(menu_categories)
 
     add_go_back_button(sliding_list, "main_menu", fb_user, business_id)
   end
@@ -62,7 +62,7 @@ class JsonFormatter
     simple_list
   end
 
-  def self.generate_sliding_list_json(list_data)
+  def self.generate_sliding_list(list_data)
     sliding_list = {
       "attachment": {
         "type": "template",
