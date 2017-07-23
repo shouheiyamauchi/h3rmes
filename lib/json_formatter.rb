@@ -35,7 +35,7 @@ class JsonFormatter
 
     sliding_list = generate_sliding_list_json(menu_categories)
 
-    add_go_back_button(sliding_list, fb_user, business_id)
+    add_go_back_button(sliding_list, "main_menu", fb_user, business_id)
   end
 
   # list is limited to 3 items, otherwise it won't display
@@ -91,9 +91,9 @@ class JsonFormatter
     sliding_list
   end
 
-  def self.add_go_back_button(sliding_list, fb_user, business_id)
+  def self.add_go_back_button(sliding_list, action_name, fb_user, business_id)
     url_data = {
-      "next_action": "list_categories",
+      "next_action": action_name,
       "fb_user": fb_user,
       "other_params": "&business_id=#{business_id}"
     }
