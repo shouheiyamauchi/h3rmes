@@ -92,20 +92,20 @@ class PagesController < ApplicationController
           ]
         }
 
-        @business.all.each do |business|
-          msg[:messages][0][:attachment][:payload][:elements] << {
-                  "title": "#{business.name}",
-                  # "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
-                  "subtitle": "Subtitle",
-                  "buttons": [
-                    {
-                      "type": "json_plugin_url",
-                      "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
-                      "title": "Check in"
-                    }
-                  ]
-                }
-        end
+        # @business.all.each do |business|
+        #   msg[:messages][0][:attachment][:payload][:elements] << {
+        #           "title": "#{business.name}",
+        #           "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+        #           "subtitle": "Subtitle",
+        #           "buttons": [
+        #             {
+        #               "type": "json_plugin_url",
+        #               "url": "#{ENV["APP_URL"]}/pages/create_order.json?business_id=#{business.id}&fb_user=#{@fb_user}&business_id=#{business.id}&table_number=#{@table_number}",
+        #               "title": "Check in"
+        #             }
+        #           ]
+        #         }
+        # end
 
       end
       format.json  { render :json => msg } # don't do msg.to_json
