@@ -117,7 +117,7 @@ class PagesController < ApplicationController
   def add_item
     business_id = params[:business_id]
     item = params[:item]
-    order = Order.last_order
+    order = Order.last_order(@fb_user)
 
     order_list = order.order_list
     order_list << item
