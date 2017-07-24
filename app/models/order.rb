@@ -19,6 +19,7 @@ class Order < ApplicationRecord
     end
   end
 
+  # used for views
   def find_total
     sum = 0
     self.order_list.each do |item|
@@ -28,11 +29,11 @@ class Order < ApplicationRecord
   end
 
   def calculate_total
-    sum = 0
+    order_total = 0
     self.order_list.each do |item|
-      sum += MenuItem.find(item).price
+      order_total += MenuItem.find(item).price
     end
 
-    sum
+    order_total
   end
 end
