@@ -60,6 +60,10 @@ class JsonFormatter
     add_go_back_button(sliding_list, "list_categories", fb_user, business_id)
   end
 
+  def self.generate_message(message)
+    { "text": message }
+  end
+
   # list is limited to 3 items, otherwise it won't display
   def self.generate_simple_list(list_data)
     simple_list = {
