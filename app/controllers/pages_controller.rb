@@ -115,21 +115,21 @@ class PagesController < ApplicationController
   end
 
   def add_item
-    @business_id = params[:business_id]
-    @item = params[:item]
-    @order = Order.last_order
+    business_id = params[:business_id]
+    item = params[:item]
+    order = Order.last_order
 
-    @order_list = @order.order_list
-    @order_list << @item
+    order_list = order.order_list
+    order_list << item
 
-    @order.update_attribute("order_list", @order_list)
+    order.update_attribute("order_list", order_list)
 
     @msg[:messages] <<  {
         "attachment": {
           "type": "template",
           "payload": {
             "template_type": "button",
-            "text": "You have ordered: #{@item} x 1",
+            "text": "You have ordered: #{item} x 1",
             "buttons": []
           }
         }
@@ -138,8 +138,6 @@ class PagesController < ApplicationController
     @msg[:messages] << JsonFormatter.generate_categories_list(@fb_user, business_id)
 
     respond_to do |format|
-
-
       format.json  { render :json => @msg } # don't do msg.to_json
     end
   end
