@@ -132,45 +132,48 @@ class PagesController < ApplicationController
   end
 
   def find_total
-    @business_id = params[:business_id]
-    @order = Order.last_order(@fb_user)
-    @sum = 0
-    @order_list = @order.order_list
+    business_id = params[:business_id]
+    order = Order.last_order(@fb_user)
+    sum = 0
+    order_list = order.order_list
 
-    @order_list.each do |item|
-      order_item = MenuItem.find(item)
-      @sum += order_item.price
+    order_list.each do |item|
+      # order_item = MenuItem.find(item)
+      sum += MenuItem.find(item).price
     end
 
+    # msg = {
+    # "messages": [
+    #   # {"text": "Your FB id is #{@fb_user}"},
+    #   {"text": "You ordered the following:"}
+    #   ]
+    # }
+
+    @msg[:messages] << JsonFormatter.generate_message("You ordered the following items:")
+
+    order.order_list.each do |item|
+      @msg[:messages] << {"text": "#{MenuItem.find(item).name}...$#{MenuItem.find(item).price}"}
+    end
+
+    @msg[:messages] << {
+      "attachment": {
+        "payload":{
+          "template_type": "button",
+          "text": "The total for your order is $#{sum}",
+          "buttons": [
+            {
+              "url": "#{ENV["APP_URL"]}/pages/make_payment.json?fb_user=#{@fb_user}",
+              "type":"json_plugin_url",
+              "title":"Make Payment"
+            }
+          ]
+        },
+        "type": "template"
+      }
+    }
+
     respond_to do |format|
-      msg = {
-      "messages": [
-        # {"text": "Your FB id is #{@fb_user}"},
-        {"text": "You ordered the following:"}
-        ]
-      }
-
-      @order.order_list.each do |item|
-        msg[:messages] << {"text": "#{MenuItem.find(item).name}}...$#{MenuItem.find(item).price}"}
-      end
-      msg[:messages] << {
-        "attachment": {
-          "payload":{
-            "template_type": "button",
-            "text": "The total for your order is $#{@sum}",
-            "buttons": [
-              {
-                "url": "#{ENV["APP_URL"]}/pages/make_payment.json?fb_user=#{@fb_user}",
-                "type":"json_plugin_url",
-                "title":"Make Payment"
-              }
-            ]
-          },
-          "type": "template"
-        }
-      }
-
-      format.json { render :json => msg }
+      format.json { render :json => @msg }
     end
   end
 
