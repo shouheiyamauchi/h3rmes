@@ -34,6 +34,6 @@ class Order < ApplicationRecord
       order_total += MenuItem.find(item).price
     end
 
-    number_with_precision(order_total, precision: 2)
+    order_total
   end
 end
