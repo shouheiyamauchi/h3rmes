@@ -142,23 +142,6 @@ class PagesController < ApplicationController
       @msg[:messages] << JsonFormatter.generate_message("#{MenuItem.find(item).name}...$#{MenuItem.find(item).price}")
     end
 
-    # @msg[:messages] << {
-    #   "attachment": {
-    #     "payload":{
-    #       "template_type": "button",
-    #       "text": "The total for your order is $#{order_total}",
-    #       "buttons": [
-    #         {
-    #           "url": "#{ENV["APP_URL"]}/pages/make_payment.json?fb_user=#{@fb_user}",
-    #           "type":"json_plugin_url",
-    #           "title":"Make Payment"
-    #         }
-    #       ]
-    #     },
-    #     "type": "template"
-    #   }
-    # }
-
     list_data = {
       text: "The total for your order is $#{order_total}",
       buttons: [
@@ -180,17 +163,12 @@ class PagesController < ApplicationController
   end
 
   def make_payment
-    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
-    @order.update_attribute("paid", true)
+    order = Order.last_order(@fb_user)
+    order.update_attribute("paid", true)
+
+    @msg[:messages] << JsonFormatter.generate_message("Thank you for your payment! Please visit #{order.business_name} again.")
 
     respond_to do |format|
-      msg = {
-      "messages": [
-        # {"text": "Your FB id is #{@fb_user}"},
-        {"text": "Thank you for your payment! Please visit #{@order.business_name} again."}
-        ]
-      }
-
       format.json { render :json => msg }
     end
   end
