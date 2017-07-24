@@ -26,4 +26,13 @@ class Order < ApplicationRecord
     end
     return sum
   end
+
+  def calculate_total
+    sum = 0
+    self.order_list.each do |item|
+      sum += MenuItem.find(item).price
+    end
+
+    sum
+  end
 end

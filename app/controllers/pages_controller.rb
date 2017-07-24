@@ -134,13 +134,15 @@ class PagesController < ApplicationController
   def find_total
     business_id = params[:business_id]
     order = Order.last_order(@fb_user)
-    sum = 0
-    order_list = order.order_list
+    # sum = 0
+    # order_list = order.order_list
+    #
+    # order_list.each do |item|
+    #   # order_item = MenuItem.find(item)
+    #   sum += MenuItem.find(item).price
+    # end
 
-    order_list.each do |item|
-      # order_item = MenuItem.find(item)
-      sum += MenuItem.find(item).price
-    end
+    sum = order.calculate_total
 
     # msg = {
     # "messages": [
