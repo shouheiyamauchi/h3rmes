@@ -133,16 +133,14 @@ class PagesController < ApplicationController
 
   def find_total
     @business_id = params[:business_id]
-    @order = Order.where(:fb_user=>@fb_user, :paid=>false).first
+    @order = Order.last_order(@fb_user)
     @sum = 0
     @order_list = @order.order_list
 
     @order_list.each do |item|
-      order_item = MenuItem.where(:name=>item).first
+      order_item = MenuItem.find(item)
       @sum += order_item.price
     end
-
-
 
     respond_to do |format|
       msg = {
@@ -153,7 +151,7 @@ class PagesController < ApplicationController
       }
 
       @order.order_list.each do |item|
-        msg[:messages] << {"text": "#{item}...$#{MenuItem.where(:name=>item).first.price}"}
+        msg[:messages] << {"text": "#{item}...$#{MenuItem.find(item).price}"}
       end
       msg[:messages] << {
         "attachment": {
