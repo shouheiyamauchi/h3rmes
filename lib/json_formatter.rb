@@ -50,7 +50,7 @@ class JsonFormatter
         "url_data": {
           "next_action": "add_item",
           "fb_user": fb_user,
-          "other_params": "&business_id=#{business_id}&item=#{URI.encode(item.name)}"
+          "other_params": "&business_id=#{business_id}&item=#{item.id}"
         }
       }
     end

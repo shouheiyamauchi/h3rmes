@@ -123,7 +123,7 @@ class PagesController < ApplicationController
     order_list << item
     order.update_attribute("order_list", order_list)
 
-    @msg[:messages] << JsonFormatter.generate_message("You have ordered: #{item} x 1")
+    @msg[:messages] << JsonFormatter.generate_message("You have ordered: #{MenuItem.find(item).name} x 1")
     @msg[:messages] << JsonFormatter.generate_categories_list(@fb_user, business_id)
 
     respond_to do |format|
