@@ -124,16 +124,9 @@ class PagesController < ApplicationController
 
     order.update_attribute("order_list", order_list)
 
-    @msg[:messages] <<  {
-        "attachment": {
-          "type": "template",
-          "payload": {
-            "template_type": "button",
-            "text": "You have ordered: #{item} x 1",
-            "buttons": []
-          }
-        }
-      }
+
+
+    @msg[:messages] << {"text": "You have ordered: #{item} x 1"}
 
     @msg[:messages] << JsonFormatter.generate_categories_list(@fb_user, business_id)
 
