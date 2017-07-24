@@ -151,7 +151,7 @@ class PagesController < ApplicationController
       }
 
       @order.order_list.each do |item|
-        msg[:messages] << {"text": "#{item}...$#{MenuItem.find(item).price}"}
+        msg[:messages] << {"text": "#{MenuItem.find(item).name}}...$#{MenuItem.find(item).price}"}
       end
       msg[:messages] << {
         "attachment": {
