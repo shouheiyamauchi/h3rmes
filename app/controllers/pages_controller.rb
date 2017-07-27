@@ -169,7 +169,7 @@ class PagesController < ApplicationController
     @msg[:messages] << JsonFormatter.generate_message("Thank you for your payment! Please visit #{order.business_name} again.")
 
     respond_to do |format|
-      format.json { render :json => msg }
+      format.json { render :json => @msg }
     end
   end
 
