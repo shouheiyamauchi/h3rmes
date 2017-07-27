@@ -143,7 +143,7 @@ class PagesController < ApplicationController
     end
 
     list_data = {
-      text: "The total for your order is $#{order_total}",
+      text: "The total for your order is $#{order_total.round(2)}",
       buttons: [
         {
           "button_title": "Make Payment",
