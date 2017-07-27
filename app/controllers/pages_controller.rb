@@ -28,7 +28,7 @@ class PagesController < ApplicationController
     end
 
     respond_to do |format|
-      format.json  { render :json => @msg } # don't do msg.to_json
+      format.json  { render :json => @msg }
     end
   end
 
@@ -99,7 +99,7 @@ class PagesController < ApplicationController
     @msg[:messages] << JsonFormatter.generate_categories_list(@fb_user, business_id)
 
     respond_to do |format|
-      format.json  { render :json => @msg } # don't do msg.to_json
+      format.json  { render :json => @msg }
     end
   end
 
@@ -110,7 +110,7 @@ class PagesController < ApplicationController
     @msg[:messages] << JsonFormatter.generate_items_list(@fb_user, business_id, category_id)
 
     respond_to do |format|
-      format.json  { render :json => @msg } # don't do msg.to_json
+      format.json  { render :json => @msg }
     end
   end
 
@@ -127,7 +127,7 @@ class PagesController < ApplicationController
     @msg[:messages] << JsonFormatter.generate_categories_list(@fb_user, business_id)
 
     respond_to do |format|
-      format.json  { render :json => @msg } # don't do msg.to_json
+      format.json  { render :json => @msg }
     end
   end
 
