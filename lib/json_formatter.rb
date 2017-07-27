@@ -24,6 +24,7 @@ class JsonFormatter
     MenuGroup.where(:user_id => business_id).order(id: :asc).each do |category|
       menu_categories << {
               "title":"#{category.name}",
+              "subtitle":"#{category.description}",
               "button_title": "Select Category",
               "url_data": {
                 "next_action": "list_items",
