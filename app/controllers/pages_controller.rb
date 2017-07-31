@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-  require_relative "../../lib/json_formatter.rb"
   skip_before_filter :authenticate_user!
   before_filter :set_fb_user, :set_msg_hash
 
